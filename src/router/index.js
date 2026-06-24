@@ -14,7 +14,7 @@ const routes = [
                 meta: { title: "数据分析",
                     icon: "PieChart"
                  }
-
+// meta用于定义路由的元信息，可以在路由导航守卫中获取
             },{
                 path: "knowledge",
                 component: () => import("@/views/Knowledge.vue"),

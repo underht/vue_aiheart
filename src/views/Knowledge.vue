@@ -59,7 +59,7 @@
        />
     </div>
 
-        <ArticelDialog v-model="dialogTableVisible" />
+        <ArticelDialog v-model="dialogTableVisible" :categories="categories"/>
 
     </div>
 
@@ -85,6 +85,7 @@ const formItems = [
 ]
 
 const tableData =ref([])
+
 const pagination=reactive({
     currentPage:1,
     size:10,
@@ -140,12 +141,13 @@ const updatePagerCount = () => {
 onMounted(() => {
   updatePagerCount()
   window.addEventListener("resize", updatePagerCount)
+
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", updatePagerCount)
 })
-
+const categories = ref([]);  // 或者 reactive([])
 
 onMounted(async () => {
     const data = await getCategoryTree();
@@ -162,7 +164,9 @@ onMounted(async () => {
         label: item.categoryName,
         value: item.id
     }));
-    
+
+    categories.value=formItems[1].options;
+    console.log('表单项:', categories);
     await handleSearch({});
 });
 

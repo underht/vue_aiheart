@@ -7,6 +7,7 @@
       <el-row :gutter="10">
 
         <el-col
+
           v-for="item in formItems"
           :key="item.prop"
           :xs="24"
@@ -35,12 +36,13 @@
           
         </el-col>
         <!-- 按钮列：也使用响应式列属性，避免无宽度导致溢出 -->
-        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" class="actions-col"> -->
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" class="all" >
           <div class="actions">
-            <el-button type="primary" @click="handleSearch">搜索</el-button>
-            <el-button @click="handleReset" type="default">重置</el-button>
+          <el-button type="primary" @click="handleSearch">搜索</el-button>
+          <el-button @click="handleReset" type="default">重置</el-button>
           </div>
-        <!-- </el-col> -->
+        </el-col>
+
       </el-row>
     </el-form>
 
@@ -129,6 +131,9 @@ const handleReset = () => {
 
 .all{
   flex: auto;
+  padding: 0 12px;
 }
-
+// .form-col {
+//   padding:1px;
+// }
 </style>

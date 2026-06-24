@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :model-value="props.dialogTableVisible" title="新增文章" width="800">
+  <el-dialog :model-value="props.dialogTableVisible" title="新增文章" width="800" >
     <el-form :model="fromdata" class="article-form">
       <el-form-item class="form-item" label="文章标题">
 
@@ -10,6 +10,16 @@
             clearable
         />
       </el-form-item>
+      <el-form-item label="分类">
+        <el-select v-model="fromdata.categoryId" placeholder="选择分类">
+        <el-option v-for="item in categories"
+          :label="item.lable" 
+          :value="item.value" />
+
+      </el-select>
+      </el-form-item>
+
+      
       <el-form-item label="文章内容">
         <el-input  v-model="fromdata.content" placeholder="请输入内容"
             maxlength="200"
@@ -42,6 +52,8 @@
             clearable
         />
       </el-form-item>
+
+
     </el-form>
 
   </el-dialog>
@@ -54,20 +66,26 @@ const props = defineProps({
   dialogTableVisible: {
     type: Boolean,
     default: false
+  },
+  categories:{
+    type:Array,
+    default:[]
   }
 });
 
-const fromdata = reactive([
-  {
-    title: "",
-    content: "",
-    coverImage: "",
-    categoryId: 0,
-    summary: "",
-    tags: "",
-    id: ""
-  }
-]);
+const fromdata = reactive(
+ {
+    "title": "",
+    "content": "",
+    "coverImage": "",
+    "categoryId": 0,
+    "summary": "",
+    "tags": "",
+    "id": ""
+
+}
+);
+
 </script>
 <style lang="scss" scoped>
 .article-form{
