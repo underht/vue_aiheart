@@ -10,14 +10,7 @@
             clearable
         />
       </el-form-item>
-      <el-form-item label="分类">
-        <el-select v-model="fromdata.categoryId" placeholder="选择分类">
-        <el-option v-for="item in categories"
-          :label="item.lable" 
-          :value="item.value" />
 
-      </el-select>
-      </el-form-item>
 
       
       <el-form-item label="文章内容">
@@ -28,17 +21,62 @@
             clearable
         />
       </el-form-item>
-      <el-form-item label="封面图链接">
-        <el-input  v-model="fromdata.coverImage" placeholder="请输入封面图链接"
-            clearable
-        />
+      <el-form-item label="封面图片">
+        <el-upload action="#" list-type="picture-card" 
+        :before-upload="beforeupload"
+        :auto-upload="false"
+        :limit="1"
+        :class="{ hide: fileList.length >= 1 }"
+        :on-change="handleChange"
+        v-model:file-list="fileList"
+        >
+          <el-icon><Plus /></el-icon>
+
+          <template #file="{ file }">
+            <div>
+              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+              <span class="el-upload-list__item-actions">
+                <span
+                  class="el-upload-list__item-preview"
+                  @click="handlePictureCardPreview(file)"
+                >
+                  <el-icon><zoom-in /></el-icon>
+                </span>
+                <span
+                  v-if="!disabled"
+                  class="el-upload-list__item-delete"
+                  @click="handleDownload(file)"
+                >
+                  <el-icon><Download /></el-icon>
+                </span>
+                <span
+                  v-if="!disabled"
+                  class="el-upload-list__item-delete"
+                  @click="handleRemove(file)"
+                >
+                  <el-icon><Delete /></el-icon>
+                </span>
+              </span>
+            </div>
+          </template>
+        </el-upload>
+      </el-form-item>
+
+            <el-form-item label="所属分类">
+        <el-select v-model="fromdata.categoryId" placeholder="选择分类">
+        <el-option v-for="item in categories"
+          :label="item.label" 
+          :value="item.value" />
+
+      </el-select>
       </el-form-item>
       <el-form-item label="摘要">
         <el-input  v-model="fromdata.summary" placeholder="请输入摘要" 
-            maxlength="200"
+            maxlength="1000"
             show-word-limit
-            type="text"
-            clearable
+            type="textarea"
+
+            :rows="4"
         />
       </el-form-item>
       <el-form-item label="标签">
@@ -60,7 +98,9 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import { defineProps, reactive, ref } from 'vue';
+
 
 const props = defineProps({
   dialogTableVisible: {
@@ -85,7 +125,18 @@ const fromdata = reactive(
 
 }
 );
+const fileList = ref([])
+const handleChange=(file)=>{
+  console.log(file);
+  const isimg=file.type.startsWith('image/')
+  if (!isimg) {
+      ElMessage.error('请上传图片')
+  }
 
+}
+const beforeupload=()=>{
+
+}
 </script>
 <style lang="scss" scoped>
 .article-form{
@@ -95,5 +146,8 @@ const fromdata = reactive(
         flex-wrap: wrap;
 
     }
+}
+.hide :deep(.el-upload--picture-card) {
+  display: none;
 }
 </style>
