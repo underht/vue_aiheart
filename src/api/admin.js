@@ -4,6 +4,7 @@
  * 根据apifox填
  */
 import service from "@/utils/request";
+import { Header } from "element-plus/es/components/table-v2/src/components/index.mjs";
 
 
 /**
@@ -21,4 +22,14 @@ export const getCategoryTree = () => {
 
 export const articlePage = (params) => {
     return service.get("/knowledge/article/page", { params });
+}
+export const uploadfile=(file,businessId)=>{
+    let data = new FormData();
+    data.append('file', '');
+    data.append('businessType', 'ARTICLE');
+    data.append('businessId', businessId);
+    data.append('businessField', 'cover');
+
+    return service.post("/file/upload",data);
+
 }

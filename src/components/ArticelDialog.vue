@@ -24,7 +24,7 @@
       <el-form-item label="封面图片">
         <el-upload action="#" list-type="picture-card" 
         :before-upload="beforeupload"
-        :auto-upload="false"
+
         :limit="1"
         :class="{ hide: fileList.length >= 1 }"
         :on-change="handleChange"
@@ -85,11 +85,7 @@
         />
 
       </el-form-item>
-      <el-form-item label="ID">
-        <el-input  v-model="fromdata.id" placeholder="请输入ID"
-            clearable
-        />
-      </el-form-item>
+
 
 
     </el-form>
@@ -100,7 +96,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { defineProps, reactive, ref } from 'vue';
-
+import{uploadfile} from '../api/admin'
 
 const props = defineProps({
   dialogTableVisible: {
@@ -127,14 +123,43 @@ const fromdata = reactive(
 );
 const fileList = ref([])
 const handleChange=(file)=>{
-  console.log(file);
-  const isimg=file.type.startsWith('image/')
+  console.log("图片："+file.raw.type);
+  console.log("大小："+file.raw.size/1024/1024);
+  const isimg=file.raw.type.startsWith('image/');
+  const islit5m=file.size/1024/1024<5
+
   if (!isimg) {
       ElMessage.error('请上传图片')
+      return false
+  }
+    if (!islit5m) {
+      ElMessage.error('图片大小不得大于5M')
+      return false
+  }
+  return isimg&&islit5m
+}
+const beforeupload=async(file)=>{
+
+  const businessId=crypto.randomUUID();
+
+ try {
+    const upres = await uploadfile(file, businessId)
+    console.log(upres)
+    if (upres.success) {
+      fromdata.coverImage = upres.data  // 根据你后端返回结构调整
+      ElMessage.success('上传成功')
+    } else {
+      ElMessage.error(upres.msg)
+    }
+  } catch (err) {
+    console.log(err)
+    ElMessage.error('上传失败')
   }
 
+  return false;
 }
-const beforeupload=()=>{
+
+const handleRemove=()=>{
 
 }
 </script>
