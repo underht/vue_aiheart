@@ -1,4 +1,4 @@
-
+//api/admin.js
 /**
  * 向后端的请求
  * 根据apifox填
@@ -25,11 +25,11 @@ export const articlePage = (params) => {
 }
 export const uploadfile=(file,businessId)=>{
     let data = new FormData();
-    data.append('file', '');
+    data.append('file', 'file');
     data.append('businessType', 'ARTICLE');
     data.append('businessId', businessId);
     data.append('businessField', 'cover');
 
-    return service.post("/file/upload",data);
+    return service.post("/mock/file/upload",data);
 
 }

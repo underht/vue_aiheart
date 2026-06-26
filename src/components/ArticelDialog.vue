@@ -22,9 +22,11 @@
         />
       </el-form-item>
       <el-form-item label="封面图片">
-        <el-upload action="#" list-type="picture-card" 
+        <el-upload 
+        action="#" 
+        list-type="picture-card" 
         :before-upload="beforeupload"
-
+        :auto-upload=false
         :limit="1"
         :class="{ hide: fileList.length >= 1 }"
         :on-change="handleChange"
@@ -86,6 +88,10 @@
 
       </el-form-item>
 
+      <el-form-item label="文本">
+        <TestBox></TestBox>
+
+      </el-form-item>
 
 
     </el-form>
@@ -97,7 +103,8 @@
 import { ElMessage } from 'element-plus';
 import { defineProps, reactive, ref } from 'vue';
 import{uploadfile} from '../api/admin'
-
+import {filebaseurl}from '../config/index'
+import TestBox from '@/components/TestBox.vue'
 const props = defineProps({
   dialogTableVisible: {
     type: Boolean,
@@ -145,9 +152,12 @@ const beforeupload=async(file)=>{
  try {
     const upres = await uploadfile(file, businessId)
     console.log(upres)
-    if (upres.success) {
-      fromdata.coverImage = upres.data  // 根据你后端返回结构调整
-      ElMessage.success('上传成功')
+    if (!upres.success) {//反的因为api了
+
+      ElMessage.success('上传成功');
+      realurl=filebaseurl+upres.data.url
+      console.log(realurl)
+      fromdata.coverImage=realurl
     } else {
       ElMessage.error(upres.msg)
     }
@@ -155,11 +165,13 @@ const beforeupload=async(file)=>{
     console.log(err)
     ElMessage.error('上传失败')
   }
-
+  
   return false;
 }
 
 const handleRemove=()=>{
+  fileList.value=[]
+  fromdata.coverImage=""
 
 }
 </script>
