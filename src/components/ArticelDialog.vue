@@ -10,17 +10,6 @@
             clearable
         />
       </el-form-item>
-
-
-      
-      <el-form-item label="文章内容">
-        <el-input  v-model="fromdata.content" placeholder="请输入内容"
-            maxlength="200"
-            show-word-limit
-            type="text"
-            clearable
-        />
-      </el-form-item>
       <el-form-item label="封面图片">
         <el-upload 
         action="#" 
@@ -89,7 +78,8 @@
       </el-form-item>
 
       <el-form-item label="文本">
-        <TestBox></TestBox>
+        <TestBox 
+        ></TestBox>
 
       </el-form-item>
 
@@ -128,6 +118,8 @@ const fromdata = reactive(
 
 }
 );
+
+
 const fileList = ref([])
 const handleChange=(file)=>{
   console.log("图片："+file.raw.type);
