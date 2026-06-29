@@ -1,3 +1,5 @@
+<!-- articleDialog.vue -->
+
 <template>
   <el-dialog :model-value="props.dialogTableVisible" title="新增文章" width="800" >
     <el-form :model="fromdata" class="article-form">
@@ -79,13 +81,28 @@
 
       <el-form-item label="文本">
         <TestBox 
+        v-model:content="fromdata.content"
         ></TestBox>
 
       </el-form-item>
-
+      <el-form-item label="内容预览" v-show="Preview">
+      <div  >
+        <div v-html="fromdata.content" class="preview">
+        </div>
+      </div>
+      </el-form-item>
 
     </el-form>
 
+
+    <template #footer>
+      <div>
+        <el-button @click="handlePreview">预览</el-button>
+        <el-button @click="handleClose">取消</el-button>
+        <el-button @click="submit">提交</el-button>
+
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -103,7 +120,7 @@ const props = defineProps({
   categories:{
     type:Array,
     default:[]
-  }
+  },
 });
 
 const fromdata = reactive(
@@ -119,6 +136,10 @@ const fromdata = reactive(
 }
 );
 
+const Preview = ref(false);
+const handlePreview=()=>{
+  Preview.value=!Preview.value
+}
 
 const fileList = ref([])
 const handleChange=(file)=>{
@@ -179,4 +200,6 @@ const handleRemove=()=>{
 .hide :deep(.el-upload--picture-card) {
   display: none;
 }
-</style>
+
+
+</style> 
