@@ -59,7 +59,7 @@
        />
     </div>
 
-        <ArticelDialog v-model="dialogTableVisible" :categories="categories"/>
+        <ArticelDialog v-model="dialogTableVisible" :categories="categories" @uploadSussess="handleUploadSussess"/>
 
     </div>
 
@@ -137,7 +137,9 @@ const updatePagerCount = () => {
   else if (width > 768) pagerCount.value = 7
   else pagerCount.value = 5
 }
-
+const handleUploadSussess=()=>{
+    console.log("上传成功");
+}
 onMounted(() => {
   updatePagerCount()
   window.addEventListener("resize", updatePagerCount)

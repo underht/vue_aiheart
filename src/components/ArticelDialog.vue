@@ -124,7 +124,7 @@ categories:{
     default:[]
 },
 });
-
+const emit=defineEmits(['update:dialogTableVisible','uploadSussess'])
 const fromdata = reactive(
 {
     "title": "",
@@ -178,7 +178,7 @@ const businessId=crypto.randomUUID();
 try {
     const upres = await uploadfile(file, businessId)
     console.log(upres)
-    if (!upres.success) {//反的因为api了
+    if (!upres.success) {//反的因为api寄了
 
     ElMessage.success('上传成功');
     realurl=filebaseurl+upres.data.url
@@ -216,6 +216,8 @@ const handlesubmit=async()=>{
         console.log(res)
         if (res.success) {
         ElMessage.success(res.msg)
+
+		emit('uploadSussess')
         } else {
         ElMessage.error(res.msg)
     }
