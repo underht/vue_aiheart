@@ -73,10 +73,12 @@
         />
     </el-form-item>
     <el-form-item label="标签">
-        <el-input  v-model="fromdata.tags" placeholder="请输入标签"
-            clearable
-        />
-
+		<el-input-tag
+			v-model="fromdata.tags"
+			placeholder="请输入标签"
+			aria-label="Please click the Enter key after input"
+			clearable
+		/>
     </el-form-item>
 
     <el-form-item prop="content" label="正文内容">
@@ -130,7 +132,7 @@ const fromdata = reactive(
     "coverImage": "",
     "categoryId": 0,
     "summary": "",
-    "tags": "",
+    "tags": [],
     "id": ""
 
 }
@@ -201,13 +203,16 @@ fromdata.coverImage=""
 const loading = ref(false)
 const formRef=ref(null)
 const handlesubmit=async()=>{
-console.log("表单：",fromdata);
-
-formRef.value.validate(async (valid, fields) => {
+	console.log("表单：",fromdata);
+		const submitData = {
+		...fromdata,                        // 把 formData 所有字段复制过来
+		tags: fromdata.tags.join(',')   // tags 用数组join成逗号分隔的字符串
+		}
+	formRef.value.validate(async (valid, fields) => {
     if (valid) {
         loading.value = true
         // 校验通过，执行提交逻辑
-        const res=await createArticle(fromdata)
+        const res=await createArticle(submitData)
         console.log(res)
         if (res.success) {
         ElMessage.success(res.msg)
