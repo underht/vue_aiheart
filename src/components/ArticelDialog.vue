@@ -1,7 +1,10 @@
 <!-- articleDialog.vue -->
 
 <template>
-<el-dialog :model-value="props.dialogTableVisible" :title="isEdit ? '编辑文章' : '新增文章'" width="800" 
+<el-dialog 
+:model-value="props.dialogTableVisible" 
+:title="isEdit ? '编辑文章' : '新增文章'" 
+width="800" 
 class="article-dialog" 
 >
     <el-form ref="formRef" :model="fromdata" :rules="rules" class="article-form" label-width="auto">
@@ -76,7 +79,7 @@ class="article-dialog"
     </el-form-item>
     <el-form-item label="标签">
 		<el-input-tag
-			v-model="fromdata.tags"
+			v-model="fromdata.tagsArray"
 			placeholder="请输入标签"
 			aria-label="Please click the Enter key after input"
 			clearable
@@ -86,6 +89,7 @@ class="article-dialog"
     <el-form-item prop="content" label="正文内容">
         <TestBox 
         v-model:content="fromdata.content"
+		ref="testBoxRef"
         ></TestBox>
 
     </el-form-item>
@@ -140,21 +144,22 @@ const fromdata = reactive(
     "coverImage": "",
     "categoryId": 0,
     "summary": "",
-    "tags": [],
+    "tagsArray": [],
+	"tags": "",
     "id": ""
 
 }
 );
 const rules=reactive({
-title: [
-    { required: true, message: '请输入标题', trigger: 'blur' }
-],
-content: [
-    { required: true, message: '请输入内容', trigger: 'blur' }
-],
-categoryId: [
-    { required: true, message: '请选择分类', trigger: 'blur' }
-],
+	title: [
+		{ required: true, message: '请输入标题', trigger: 'blur' }
+	],
+	content: [
+		{ required: true, message: '请输入内容', trigger: 'blur' }
+	],
+	categoryId: [
+		{ required: true, message: '请选择分类', trigger: 'blur' }
+	],
 
 })
 const isEdit=computed(()=>{  return !!props.article?.id
@@ -216,9 +221,12 @@ fileList.value=[]
 fromdata.coverImage=""
 
 }
-const handleClose=()=>{
+const testBoxRef = ref(null)
 
-	emit('update:dialogTableVisible',false)
+const handleClose = () => {
+  formRef.value.resetFields()
+  testBoxRef.value?.clear()  // 调用子组件暴露的方法
+  emit('update:dialogTableVisible', false)
 }
 
 
@@ -227,10 +235,12 @@ const loading = ref(false)
 const formRef=ref(null)
 const handlesubmit=async()=>{
 	console.log("表单：",fromdata);
-		const submitData = {
-		...fromdata,                        // 把 formData 所有字段复制过来
-		tags: fromdata.tags.join(',')   // tags 用数组join成逗号分隔的字符串
-		}
+	const submitData = {
+	...fromdata,                        // 把 formData 所有字段复制过来
+	tags: fromdata.tagsArray.join(','),   // tags 用数组join成逗号分隔的字符串
+	
+	}
+	delete submitData.tagsArray;
 	formRef.value.validate(async (valid, fields) => {
     if (valid) {
         loading.value = true

@@ -94,4 +94,11 @@ onBeforeUnmount(() => {
   if (editor == null) return
   editor.destroy()
 })
+// TestBox.vue 里暴露一个清空方法
+defineExpose({
+  clear: () => {
+    editorRef.value?.setHtml('<p></p>')
+    valueHtml.value = ''
+  }
+})
 </script>
