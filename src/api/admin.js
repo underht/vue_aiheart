@@ -37,3 +37,6 @@ export const createArticle=(data)=>{
 
     return service.post("/knowledge/article",data)
 }
+export const getArticle=(id)=>{
+    return service.get("/knowledge/article/"+id)
+}

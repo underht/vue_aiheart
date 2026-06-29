@@ -7,7 +7,7 @@
         </PageHead>
         <TableSearch :formItems="formItems" @search="handleSearch" id="table-search" />
 
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table :data="tableData" stripe class="table">
             <el-table-column prop="title" label="标题" width="180" fixed="left">
                 <template #default="{ row }">
                     {{ row.title }}
@@ -38,15 +38,16 @@
                     {{ row.readCount }}
                 </template>
             </el-table-column>
-            <el-table-column prop="column" label="操作" width="400" fixed="right">
-            <template #default="{ row }">
-                <el-button>编辑</el-button>
-                <el-button v-if="row.status === 0" >发布</el-button>
-                <el-button v-else disabled>发布</el-button>
-
-                <el-button v-if="row.status === 1" >下线</el-button>
-                <el-button v-else disabled>下线</el-button>
-                <el-button>删除</el-button>
+            <el-table-column prop="column" label="操作" width="300" fixed="right">
+            <template #default="{ row }" >
+                <div class="action">
+                    <el-button @click="handleEdit(row)">编辑</el-button>
+                    <el-button v-if="row.status === 0">发布</el-button>
+                    <el-button v-else disabled>发布</el-button>
+                    <el-button v-if="row.status === 1">下线</el-button>
+                    <el-button v-else disabled>下线</el-button>
+                    <el-button>删除</el-button>
+                </div>
             </template>
             </el-table-column>
         </el-table>
@@ -59,7 +60,12 @@
        />
     </div>
 
-        <ArticelDialog v-model="dialogTableVisible" :categories="categories" @uploadSussess="handleUploadSussess"/>
+        <ArticelDialog v-model="dialogTableVisible" :categories="categories" 
+        @uploadSussess="handleUploadSussess" 
+        v-model:dialogTableVisible="dialogTableVisible"
+        :article="articleData"
+        
+        />
 
     </div>
 
@@ -69,7 +75,7 @@
 import { onMounted, reactive, ref, onBeforeUnmount } from 'vue';
 import PageHead from '../components/PageHead.vue';
 import TableSearch from '../components/TableSearch.vue';
-import { getCategoryTree, articlePage } from '@/api/admin';
+import { getCategoryTree, articlePage ,getArticle} from '@/api/admin';
 import ArticelDialog from '../components/ArticelDialog.vue';
 
 const formItems = [
@@ -124,8 +130,9 @@ const handlePageChange = (page) => {
 const dialogTableVisible = ref(false);
 const handleAdd = () => {
     // 处理新增逻辑，例如打开一个对话框或跳转到新增页面
+    articleData.value={};
+    console.log('点击了新增按钮', dialogTableVisible.value,articleData.value);
     dialogTableVisible.value = true;
-    console.log('点击了新增按钮', dialogTableVisible.value);
 
 };
 const pagerCount = ref(7)
@@ -140,6 +147,18 @@ const updatePagerCount = () => {
 const handleUploadSussess=()=>{
     console.log("上传成功");
 }
+const articleData=ref()
+const articleRes=ref()
+
+const handleEdit=async(row)=>{
+    console.log("编辑",row);
+    articleRes.value=await getArticle(row.id);
+    console.log("信息",articleRes);
+    articleData.value=articleRes.value.data
+    dialogTableVisible.value=true
+    
+}
+
 onMounted(() => {
   updatePagerCount()
   window.addEventListener("resize", updatePagerCount)
@@ -180,5 +199,13 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     padding: 12px 0;
+}
+.table{
+    padding: min;
+}
+.action{
+    display: flex;
+    flex-direction:row-reverse;
+
 }
 </style>

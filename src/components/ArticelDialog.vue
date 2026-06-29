@@ -1,8 +1,10 @@
 <!-- articleDialog.vue -->
 
 <template>
-<el-dialog :model-value="props.dialogTableVisible" title="新增文章" width="800" >
-    <el-form ref="formRef" :model="fromdata" :rules="rules" class="article-form">
+<el-dialog :model-value="props.dialogTableVisible" :title="isEdit ? '编辑文章' : '新增文章'" width="800" 
+class="article-dialog" 
+>
+    <el-form ref="formRef" :model="fromdata" :rules="rules" class="article-form" label-width="auto">
     <el-form-item prop="title" class="form-item" label="文章标题">
 
         <el-input  v-model="fromdata.title" placeholder="请输入标题"
@@ -101,7 +103,7 @@
     <div>
         <el-button @click="handlePreview">预览</el-button>
         <el-button @click="handleClose">取消</el-button>
-        <el-button @click="handlesubmit">提交</el-button>
+        <el-button @click="handlesubmit">{{isEdit ? '确定编辑' : '确定新增'}}</el-button>
 
     </div>
     </template>
@@ -110,7 +112,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus';
-import { defineProps, reactive, ref } from 'vue';
+import { computed, defineProps, reactive, ref ,watch} from 'vue';
 import{uploadfile,createArticle} from '../api/admin'
 import {filebaseurl}from '../config/index'
 import TestBox from '@/components/TestBox.vue'
@@ -123,6 +125,12 @@ categories:{
     type:Array,
     default:[]
 },
+article:{
+	type:Object,
+	default:{}
+}
+
+
 });
 const emit=defineEmits(['update:dialogTableVisible','uploadSussess'])
 const fromdata = reactive(
@@ -149,6 +157,14 @@ categoryId: [
 ],
 
 })
+const isEdit=computed(()=>{  return !!props.article?.id
+}
+)
+watch(() => props.article, (newVal) => {
+  console.log("是不是edit:", isEdit.value, newVal)
+  console.log("article",props.article)
+}, { deep: true })
+
 const Preview = ref(false);
 const handlePreview=()=>{
 Preview.value=!Preview.value
@@ -200,6 +216,13 @@ fileList.value=[]
 fromdata.coverImage=""
 
 }
+const handleClose=()=>{
+
+	emit('update:dialogTableVisible',false)
+}
+
+
+
 const loading = ref(false)
 const formRef=ref(null)
 const handlesubmit=async()=>{
@@ -228,16 +251,19 @@ const handlesubmit=async()=>{
 }
 </script>
 <style lang="scss" scoped>
-.article-form{
-    .form-item {
-
-        display: flex;
-        flex-wrap: wrap;
-
-    }
+.article-dialog{
+	
+	display: flex;
+	flex-direction: column;
+	.article-form{
+		.form-item {
+			flex-wrap: wrap;
+		}
+	}	
 }
+
 .hide :deep(.el-upload--picture-card) {
-display: none;
+	display: none;
 } 
 
 
