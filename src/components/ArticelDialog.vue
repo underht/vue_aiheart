@@ -99,7 +99,7 @@
       <div>
         <el-button @click="handlePreview">预览</el-button>
         <el-button @click="handleClose">取消</el-button>
-        <el-button @click="submit">提交</el-button>
+        <el-button @click="handlesubmit">提交</el-button>
 
       </div>
     </template>
@@ -109,7 +109,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { defineProps, reactive, ref } from 'vue';
-import{uploadfile} from '../api/admin'
+import{uploadfile,createArticle} from '../api/admin'
 import {filebaseurl}from '../config/index'
 import TestBox from '@/components/TestBox.vue'
 const props = defineProps({
@@ -135,7 +135,9 @@ const fromdata = reactive(
 
 }
 );
-
+const rules=reactive({
+  
+})
 const Preview = ref(false);
 const handlePreview=()=>{
   Preview.value=!Preview.value
@@ -160,7 +162,7 @@ const handleChange=(file)=>{
 }
 const beforeupload=async(file)=>{
 
-  const businessId=crypto.randomUUID();
+const businessId=crypto.randomUUID();
 
  try {
     const upres = await uploadfile(file, businessId)
@@ -186,6 +188,16 @@ const handleRemove=()=>{
   fileList.value=[]
   fromdata.coverImage=""
 
+}
+const handlesubmit=async()=>{
+  console.log("表单：",fromdata)
+  const res=await createArticle(fromdata)
+  console.log(res)
+  if (res.success) {
+    ElMessage.success(res.msg)
+  } else {
+    ElMessage.error(res.msg)
+  }
 }
 </script>
 <style lang="scss" scoped>

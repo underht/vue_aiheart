@@ -33,3 +33,7 @@ export const uploadfile=(file,businessId)=>{
     return service.post("/mock/file/upload",data);
 
 }
+export const createArticle=(data)=>{
+
+    return service.post("/knowledge/article",data)
+}
