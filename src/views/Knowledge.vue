@@ -42,11 +42,11 @@
             <template #default="{ row }" >
                 <div class="action">
                     <el-button @click="handleEdit(row)">编辑</el-button>
-                    <el-button v-if="row.status === 0">发布</el-button>
+                    <el-button v-if="row.status === 0" @click="handlePublish(row.id)">发布</el-button>
                     <el-button v-else disabled>发布</el-button>
-                    <el-button v-if="row.status === 1">下线</el-button>
+                    <el-button v-if="row.status === 1" @click="handleOffline(row.id)">下线</el-button>
                     <el-button v-else disabled>下线</el-button>
-                    <el-button>删除</el-button>
+                    <el-button @click="handleDelete(row.id)">删除</el-button>
                 </div>
             </template>
             </el-table-column>
@@ -75,8 +75,9 @@
 import { onMounted, reactive, ref, onBeforeUnmount } from 'vue';
 import PageHead from '../components/PageHead.vue';
 import TableSearch from '../components/TableSearch.vue';
-import { getCategoryTree, articlePage ,getArticle} from '@/api/admin';
+import { getCategoryTree, articlePage ,getArticle,changeStatus} from '@/api/admin';
 import ArticelDialog from '../components/ArticelDialog.vue';
+import { ElMessageBox,ElMessage} from 'element-plus'
 
 const formItems = [
     { component: 'el-Input', prop:"title",label: '标题', placeholder: '请输入标题' },
@@ -158,6 +159,104 @@ const handleEdit=async(row)=>{
     dialogTableVisible.value=true
     
 }
+const handlePublish = (id) => {
+//   console.log("发布", id);
+  
+  ElMessageBox.confirm(
+    '确认发布此内容吗?',
+    '提示',
+    {
+      distinguishCancelAndClose: true,
+      confirmButtonText: '发布',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }
+  )
+  .then(async () => {
+    // 核心逻辑：用户确认后，调用接口修改状态
+    try {
+      const res = await changeStatus(id, 1);
+      console.log(res);
+      
+      // 成功提示通常用 'success' 类型
+      ElMessage({
+        type: 'success',
+        message: '发布成功',
+      });
+      
+      // 这里通常需要刷新列表数据，例如：fetchData();
+      
+    } catch (error) {
+      // 核心逻辑：真正捕获接口请求失败的情况
+      console.error("发布接口请求失败:", error);
+      ElMessage({
+        type: 'error',
+        message: '发布失败，请稍后再试',
+      });
+    }
+  })
+  .catch((action) => {
+    // 核心逻辑：处理用户未确认的情况（取消或关闭弹窗）
+    if (action === 'cancel') {
+      ElMessage({
+        type: 'info',
+        message: '已取消发布',
+      });
+    } else {
+      console.log('用户关闭了弹窗');
+    }
+  });
+};
+const handleOffline = (id) => {
+//   console.log("发布", id);
+  
+  ElMessageBox.confirm(
+    '确认下线此内容吗?',
+    '提示',
+    {
+      distinguishCancelAndClose: true,
+      confirmButtonText: '下线',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }
+  )
+  .then(async () => {
+    // 核心逻辑：用户确认后，调用接口修改状态
+    try {
+      const res = await changeStatus(id, 2);
+      console.log(res);
+      
+      // 成功提示通常用 'success' 类型
+      ElMessage({
+        type: 'success',
+        message: '下线成功',
+      });
+      
+      // 这里通常需要刷新列表数据，例如：fetchData();
+      
+    } catch (error) {
+      // 核心逻辑：真正捕获接口请求失败的情况
+      console.error("发布接口请求失败:", error);
+      ElMessage({
+        type: 'error',
+        message: '发布失败，请稍后再试',
+      });
+    }
+  })
+  .catch((action) => {
+    // 核心逻辑：处理用户未确认的情况（取消或关闭弹窗）
+    if (action === 'cancel') {
+      ElMessage({
+        type: 'info',
+        message: '已取消',
+      });
+    } else {
+      console.log('用户关闭了弹窗');
+    }
+  });
+};
+
+handleDelete
 
 onMounted(() => {
   updatePagerCount()

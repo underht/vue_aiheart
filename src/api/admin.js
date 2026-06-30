@@ -44,3 +44,7 @@ export const exchangeArticle=(id,data)=>{
     return service.put("/knowledge/article/"+id,data);
 
 }
+export const changeStatus=(id,status)=>{
+//状态（1 发布 2下线）
+    return service.put("/knowledge/article/"+id+"/"+status);
+}

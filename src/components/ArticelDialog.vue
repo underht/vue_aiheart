@@ -264,15 +264,27 @@ const handlesubmit=async()=>{
     if (valid) {
         loading.value = true
         // 校验通过，执行提交逻辑
-        const res=await createArticle(submitData)
-        console.log(res)
-        if (res.success) {
-        ElMessage.success(res.msg)
+        if(isEdit.value){
+            const res=await exchangeArticle(fromdata.id,submitData)
+            console.log(res)
+            if (res.success) {
+                ElMessage.success(res.msg)
 
-		emit('uploadSussess')
-        } else {
-        ElMessage.error(res.msg)
-    }
+                emit('uploadSussess')
+            }else {
+                ElMessage.error(res.msg);
+            }
+        }else{
+            const res=await createArticle(submitData)
+            console.log(res)
+            if (res.success) {
+                ElMessage.success(res.msg)
+
+                emit('uploadSussess')
+            } else {
+                ElMessage.error(res.msg)
+            }
+        }
     }
 })
 
