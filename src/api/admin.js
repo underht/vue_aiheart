@@ -51,3 +51,6 @@ export const changeStatus=(id,status)=>{
 export const deleteAarticle=(id)=>{
     return service.delete("/knowledge/article/"+id);
 }
+export const getConsultationPage=(params)=>{
+    return service.get("/psychological-chat/sessions",{params});
+}
