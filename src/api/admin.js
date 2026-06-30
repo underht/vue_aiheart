@@ -48,3 +48,6 @@ export const changeStatus=(id,status)=>{
 //状态（1 发布 2下线）
     return service.put("/knowledge/article/"+id+"/"+status);
 }
+export const deleteAarticle=(id)=>{
+    return service.delete("/knowledge/article/"+id);
+}
