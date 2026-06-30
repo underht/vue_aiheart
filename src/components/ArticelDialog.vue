@@ -116,8 +116,8 @@ class="article-dialog"
 
 <script setup>
 import { ElMessage } from 'element-plus';
-import { computed, defineProps, reactive, ref ,watch} from 'vue';
-import{uploadfile,createArticle} from '../api/admin'
+import { computed, defineProps, reactive, ref ,watch,nextTick} from 'vue';
+import{uploadfile,createArticle,exchangeArticle} from '../api/admin'
 import {filebaseurl}from '../config/index'
 import TestBox from '@/components/TestBox.vue'
 const props = defineProps({
@@ -168,6 +168,22 @@ const isEdit=computed(()=>{  return !!props.article?.id
 watch(() => props.article, (newVal) => {
   console.log("是不是edit:", isEdit.value, newVal)
   console.log("article",props.article)
+  
+  if(isEdit.value){
+    nextTick(()=>{
+        fromdata.title=newVal.title
+        fromdata.content=newVal.content
+        fromdata.coverImage=newVal.coverImage
+        fromdata.categoryId=newVal.categoryId
+        fromdata.summary=newVal.summary
+        fromdata.tags=newVal.tags
+        fromdata.tagsArray=newVal.tags.split(",")
+        fromdata.id=newVal.id
+        testBoxRef.value?.setContent(newVal.content)
+
+    })
+
+  }
 }, { deep: true })
 
 const Preview = ref(false);
@@ -224,9 +240,12 @@ fromdata.coverImage=""
 const testBoxRef = ref(null)
 
 const handleClose = () => {
-  formRef.value.resetFields()
-  testBoxRef.value?.clear()  // 调用子组件暴露的方法
-  emit('update:dialogTableVisible', false)
+    handleRemove()
+    formRef.value.resetFields()
+    fromdata.tagsArray=[]
+    fromdata.summary=""
+    testBoxRef.value?.clear()  // 调用子组件暴露的方法
+    emit('update:dialogTableVisible', false)
 }
 
 

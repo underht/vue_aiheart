@@ -99,6 +99,10 @@ defineExpose({
   clear: () => {
     editorRef.value?.setHtml('<p></p>')
     valueHtml.value = ''
-  }
+  },
+  setContent: (html) => editorRef.value?.setHtml(html || '')
 })
+
+
+
 </script>

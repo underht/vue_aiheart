@@ -35,8 +35,12 @@ export const uploadfile=(file,businessId)=>{
 }
 export const createArticle=(data)=>{
 
-    return service.post("/knowledge/article",data)
+    return service.post("/knowledge/article",data);
 }
 export const getArticle=(id)=>{
-    return service.get("/knowledge/article/"+id)
+    return service.get("/knowledge/article/"+id);
+}
+export const exchangeArticle=(id,data)=>{
+    return service.put("/knowledge/article/"+id,data);
+
 }
