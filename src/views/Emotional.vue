@@ -10,12 +10,52 @@
             @search="handleSearch" 
             @reset="onResetData"
         />
+        <el-table :data="tableData" >
+            <el-table-column label="会话id">
+                <template #default="{ row }" >
+                    {{ row. id}}
+                </template>
+            </el-table-column>
+            <el-table-column label="用户" >
+                <template #default="{ row }" >
+                    {{ row. username}}
+                </template>
+            </el-table-column>
+            <el-table-column label="记录日期">
+                <template #default="{ row }" >
+                    {{ row. createdAt}}
+                </template>
+            </el-table-column>
+            <el-table-column  label="情绪评分">
+                <template #default="{ row }" >
+                    {{ row. moodScore}}
+                </template>
+            </el-table-column>
+            <el-table-column label="生活指标">
+                <template #default="{ row }" >
+                    {{ row. stressLevel}}
+                    {{ row.sleepQuality }}
+                </template>
+            </el-table-column>
+            <el-table-column  label="原因">
+                <template #default="{ row }" >
+                    {{ row. emotionTriggers}}
+                </template>
+            </el-table-column>
+            <el-table-column  label="主要情绪">
+                <template #default="{ row }">
+                    {{ row. dominantEmotion}}
+                </template>
+            </el-table-column>
+            
 
+            
+        </el-table>
     </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import PageHead from '../components/PageHead.vue';
 import TableSearch from '../components/TableSearch.vue';
 import {getEmotionList} from '@/api/admin';
@@ -33,9 +73,9 @@ const searchConfig = ref([
     component: 'el-select',
     placeholder: '请选择主要情绪',
     options: [
-      { label: '悲伤', value: 'sad' },
-      { label: '愤怒', value: 'angry' },
-      { label: '焦虑', value: 'anxious' }
+      { label: '快乐', value: '快乐' },
+      { label: '平静', value: '平静' },
+      { label: '焦虑', value: '焦虑' }
     ]
   },
   {
@@ -104,11 +144,15 @@ const handleSearch =async (data) => {
         
     }
 };
+
+const tableData=ref([])//tableData
 const onResetData = () => {
   console.log('重置');
 };
 
-
+onMounted(async()=>{
+    handleSearch()
+})
 
 </script>
 
