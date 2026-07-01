@@ -6,7 +6,6 @@
       <el-row :gutter="10">
 
         <el-col
-
           v-for="item in formItems"
           :key="item.prop"
           :xs="24"
@@ -14,13 +13,12 @@
           :md="8"
           :lg="6"
         >
-          <el-form-item :label="item.label" :prop="item.prop" class="form-item">
+          <el-form-item :label="item.label" :prop="item.prop" >
             <component
               :is="item.component"
               v-model="formState[item.prop]"
               v-bind="item.props"
               :placeholder="item.placeholder"
-              class="responsive-input"
             >
               <template v-if="item.options" #default>
                 <el-option

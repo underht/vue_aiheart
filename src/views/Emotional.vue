@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PageHead title="情绪日志"  >
+        <PageHead title="情绪日志">
             <template #actions>
                 <el-button type="primary">新增</el-button>
             </template>
@@ -10,55 +10,89 @@
             @search="handleSearch" 
             @reset="onResetData"
         />
-        <el-table :data="tableData" >
-            <el-table-column label="会话id">
-                <template #default="{ row }" >
-                    {{ row. id}}
-                </template>
-            </el-table-column>
-            <el-table-column label="用户" >
-                <template #default="{ row }" >
-                    {{ row. username}}
-                </template>
-            </el-table-column>
-            <el-table-column label="记录日期">
-                <template #default="{ row }" >
-                    {{ row. createdAt}}
-                </template>
-            </el-table-column>
-            <el-table-column  label="情绪评分">
-                <template #default="{ row }" >
-                    {{ row. moodScore}}
-                </template>
-            </el-table-column>
-            <el-table-column label="生活指标">
-                <template #default="{ row }" >
-                    {{ row. stressLevel}}
-                    {{ row.sleepQuality }}
-                </template>
-            </el-table-column>
-            <el-table-column  label="原因">
-                <template #default="{ row }" >
-                    {{ row. emotionTriggers}}
-                </template>
-            </el-table-column>
-            <el-table-column  label="主要情绪">
+        <el-table :data="tableData">
+            <el-table-column label="会话id" width="80px">
                 <template #default="{ row }">
-                    {{ row. dominantEmotion}}
+                    {{ row.id }}
                 </template>
             </el-table-column>
-            
+            <el-table-column label="用户"width="80px">
+                <template #default="{ row }">
+                    {{ row.username }}
+                </template>
+            </el-table-column>
+            <el-table-column label="记录日期" width="80px">
+                <template #default="{ row }">
+                    {{ row.createdAt }}
+                </template>
+            </el-table-column>
+            <el-table-column label="情绪评分" width="200px">
+                <template #default="{ row }">
+                    <el-rate
+                    :model-value="Number(row.moodScore) / 2"
+                    disabled
+                    allow-half
+                />
+                <span style="color: #ff9900; font-size: 14px;">
+                    {{ row.moodScore }} 分
+                </span>
+                </template>
+            </el-table-column>
+            <el-table-column label="生活指标" width="160px">
+                <template #default="{ row }">
+                    <div>
+                        <p>
+                            压力等级：{{ row.stressLevel }}/5
+                        </p>
+                        <p>
+                            睡眠质量：{{ row.sleepQuality }}/5
+                        </p>
+                    </div>
 
-            
+                    
+                </template>
+            </el-table-column>
+            <el-table-column label="原因">
+                <template #default="{ row }">
+                    {{ row.emotionTriggers }}
+                </template>
+            </el-table-column>
+            <el-table-column label="日记内容">
+                <template #default="{ row }">
+                    {{ row.diaryContent }}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" width="160px">
+                <template #default="{ row }">
+                    <el-button @click="showDetails(row)">详情</el-button>
+                    <el-button>删除</el-button>
+                </template>
+            </el-table-column>
+
         </el-table>
+        <el-pagination
+            layout="prev, pager, next"
+            :total="pagination.total"
+            :page-size="pagination.size"
+            @current-change="handlePageChange"
+        />
+        
+
+        <div class="dialog-container">
+            <el-dialog v-model="dialogTableVisible" title="Shipping address" width="800">
+            
+            </el-dialog>
+        </div>
     </div>
+
+
 </template>
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import PageHead from '../components/PageHead.vue';
 import TableSearch from '../components/TableSearch.vue';
-import {getEmotionList} from '@/api/admin';
+import { getEmotionList } from '@/api/admin';
 
 const searchConfig = ref([
   {
@@ -92,70 +126,79 @@ const searchConfig = ref([
   }
 ]);
 
-// current
-// string 
-// 当前页
-// 可选
-// size
-// string 
-// 分页数
-// 可选
-// userId
-// string 
-// 用户id
-// 可选
-// minMoodScore
-// string 
-// 情绪分下限
-// 可选
-// maxMoodScore
-// string 
-// 情绪分上限
-// 可选
-// dominantEmotion
-// string 
-// 主要情绪
+// 存储当前选中的搜索条件
+const extraSearchParams = ref({});
 
-const pagination=reactive({
-    currentPage:1,
-    size:10,
-    total:0
+const pagination = reactive({
+    currentPage: 1,
+    size: 10,
+    total: 0
 });
-const handleSearch =async (data) => {
+const dialogTableVisible=ref(false)
+
+const showDetails=(row)=>{
+    dialogTableVisible.value=true
+
+}
+
+// 获取列表数据的复用函数
+const fetchListData = async () => {
     try {
-    // 核心修改：1. 加上 const 声明；2. 修复对象内部的键值对语法
-    const params = {
-      ...data, // 展开运算：把输入框里的条件（如 userId, dominantEmotion）解构进来
-      
-      // 核心修复：必须指定键名，对应后端需要的参数名
-      current: pagination.currentPage, 
-      size: pagination.size,
-    };
-
-    const response = await getEmotionList(params);
-    const { records, total } = response.data;
-    console.log('情绪日志数据:', response.data);
-    tableData.value = records;
-    pagination.total = total;
-    console.log('表格数据:', tableData.value);
-
-    }catch(error){
+        // 核心逻辑：合并分页数据与最新的条件数据发送给后端
+        const params = {
+            ...extraSearchParams.value,
+            current: pagination.currentPage, 
+            size: pagination.size,
+        };
+        // 核心逻辑：遍历条件对象，只有当值不为空字符串、不为 null/undefined 时才带上
+        Object.keys(extraSearchParams.value).forEach(key => {
+            const value = extraSearchParams.value[key];
+            if (value !== '' && value !== null && value !== undefined) {
+                params[key] = value;
+            }
+        });
+        console.log('请求参数:', params);
+        const response = await getEmotionList(params);
+        const { records, total } = response.data;
+        console.log('情绪日志数据:', response.data);
+        tableData.value = records;
+        pagination.total = total;
+    } catch (error) {
         console.log(error);
-        
     }
 };
 
-const tableData=ref([])//tableData
-const onResetData = () => {
-  console.log('重置');
+// 触发搜索
+const handleSearch = async (data) => {
+    // 如果有传入新的搜索表单数据，更新响应式变量，并将页码重置为第一页
+    if (data) {
+        console.log('父组件接收到的搜索数据:', data);
+
+        extraSearchParams.value = { ...data };
+        pagination.currentPage = 1;
+    }
+    await fetchListData();
 };
 
-onMounted(async()=>{
-    handleSearch()
-})
+const tableData = ref([]);
 
+// 重置时清空条件并重新查询
+const onResetData = () => {
+  console.log('重置');
+  extraSearchParams.value = {};
+  pagination.currentPage = 1;
+  fetchListData();
+};
+
+onMounted(async () => {
+    await fetchListData();
+});
+
+const handlePageChange = (page) => {
+    pagination.currentPage = page;
+    handleSearch({});
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>
