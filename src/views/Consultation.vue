@@ -22,7 +22,7 @@
                 <el-table-column prop="startedAt" label="时间"  width="100" align="center"/>
                 <el-table-column label="操作"  width="100" align="center">
                     <template #default="scope">
-                        <el-button size="small" @click="handleview(scope.row.id)">查看</el-button>
+                        <el-button size="small" @click="handleview(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
 
@@ -36,21 +36,35 @@
         />
         </div>
         <div>
-            <el-dialog v-model="dialogTableVisible" title="Shipping address" width="800" class="dialog">
-                <el-card 
-                    v-for="item in sessiondata" :key="item" 
-                    class="card"
-                    shadow="never"
-                >
-                <p v-if="item.senderTypeDesc==='用户'">
-                    用户：
+            <el-dialog v-model="dialogTableVisible" title="查看对话" width="800" class="dialog">
+                <div class="info"  v-loading="loading">
+                    <el-card>
+                        <p>用户：{{ nowview.username}}</p>
+                        <p>对话数:{{ sessiondata.length}}</p>
+
+                        <p>开始时间：{{ sessiondata[0].createdAt }}</p>
+
+                    </el-card> 
+                </div>
+                <div class="session"  v-loading="loading">
+                    <p>
+                        对话记录
+                    </p>
+                    <el-card 
+                        v-for="item in sessiondata" :key="item" 
+                        class="card"
+                        shadow="never"
+                    >
+                    <p v-if="item.senderTypeDesc==='用户'">
+                        用户：
+                    </p>
+                    <p v-if="item.senderTypeDesc==='AI助手'">
+                        ai助手:
+                    </p>
                     {{item.content}}
-                </p>
-                <p v-if="item.senderTypeDesc==='AI助手'">
-                    ai助手:
-                    {{item.content}}
-                </p>
-                </el-card>
+                    </el-card>
+                </div>
+                
 
             </el-dialog>
         </div>
@@ -79,16 +93,23 @@ const pagetotal=ref(0)
 
 const tableData=ref([])
 const sessiondata=ref([])
+const nowview=reactive({
+    username:"",
+    id:"",
+})
 
 
-
-
-const handleview=async(id)=>{
+const loading=ref(false)
+const handleview=async(row)=>{
  try{
-        const res=await getConsultation(id)
+        loading.value=true
+        const res=await getConsultation(row.id)
+        loading.value=false
         sessiondata.value=res.data
         console.log("对话",sessiondata);
-        dialogTableVisible.value=true
+        nowview.username=row.userNickname;        
+        dialogTableVisible.value=true;
+
     }catch(error){
         console.log(error);
         
