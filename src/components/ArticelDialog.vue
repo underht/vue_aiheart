@@ -170,20 +170,27 @@ watch(() => props.article, (newVal) => {
   console.log("article",props.article)
   
   if(isEdit.value){
-    nextTick(()=>{
-        fromdata.title=newVal.title
-        fromdata.content=newVal.content
-        fromdata.coverImage=newVal.coverImage
-        fromdata.categoryId=newVal.categoryId
-        fromdata.summary=newVal.summary
-        fromdata.tags=newVal.tags
-        fromdata.tagsArray=newVal.tags.split(",")
-        fromdata.id=newVal.id
-        testBoxRef.value?.setContent(newVal.content)
+        nextTick(()=>{
+            fromdata.title=newVal.title
+            fromdata.content=newVal.content
+            fromdata.coverImage=newVal.coverImage
+            fromdata.categoryId=newVal.categoryId
+            fromdata.summary=newVal.summary
+            fromdata.tags=newVal.tags
+            fromdata.tagsArray=newVal.tags?.split(",")
+            fromdata.id=newVal.id
+            testBoxRef.value?.setContent(newVal.content)
 
-    })
+        })
+        
+    }else{
+        handleRemove()
+        formRef.value.resetFields()
+        fromdata.tagsArray=[]
+        fromdata.summary=""
+        testBoxRef.value?.clear()  // 调用子组件暴露的方法
+    }
 
-  }
 }, { deep: true })
 
 const Preview = ref(false);
@@ -261,34 +268,36 @@ const handlesubmit=async()=>{
 	}
 	delete submitData.tagsArray;
 	formRef.value.validate(async (valid, fields) => {
-    if (valid) {
-        loading.value = true
-        // 校验通过，执行提交逻辑
-        if(isEdit.value){
-            const res=await exchangeArticle(fromdata.id,submitData)
-            console.log(res)
-            if (res.success) {
-                ElMessage.success(res.msg)
+        if (valid) {
+            loading.value = true
+            // 校验通过，执行提交逻辑
+            if(isEdit.value){
+                const res=await exchangeArticle(fromdata.id,submitData)
+                console.log(res)
+                if (res.success) {
+                    ElMessage.success(res.msg)
 
-                emit('uploadSussess')
-            }else {
-                ElMessage.error(res.msg);
-            }
-        }else{
-            const res=await createArticle(submitData)
-            console.log(res)
-            if (res.success) {
-                ElMessage.success(res.msg)
+                    emit('uploadSussess')
+                }else {
+                    ElMessage.error(res.msg);
+                }
+            }else{
+                const res=await createArticle(submitData)
+                console.log(res)
+                if (res.success) {
+                    ElMessage.success(res.msg)
 
-                emit('uploadSussess')
-            } else {
-                ElMessage.error(res.msg)
+                    emit('uploadSussess')
+                } else {
+                    ElMessage.error(res.msg)
+                }
             }
         }
-    }
-})
 
 
+    })
+
+    handleClose()
 }
 </script>
 <style lang="scss" scoped>

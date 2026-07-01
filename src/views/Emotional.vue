@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PageHead title="知识库"  >
+        <PageHead title="情绪日志"  >
             <template #actions>
                 <el-button type="primary">新增</el-button>
             </template>
