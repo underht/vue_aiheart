@@ -57,3 +57,6 @@ export const getConsultationPage=(params)=>{
 export const getConsultation=(sessionId)=>{
     return service.get("/psychological-chat/sessions/"+sessionId+"/messages");
 }
+export const getEmotionList=(params)=>{
+    return service.get("/emotion-diary/admin/page",params);
+}

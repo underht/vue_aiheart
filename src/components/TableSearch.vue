@@ -1,8 +1,7 @@
 <template>
   <div class="table-search">
     <!-- 去掉 label-width，让标签宽度自适应 -->
-
-
+    <div class="table">
       <el-form :model="formState" ref="formRef" >
       <el-row :gutter="10">
 
@@ -11,9 +10,9 @@
           v-for="item in formItems"
           :key="item.prop"
           :xs="24"
-          :sm="8"
+          :sm="12"
           :md="8"
-          :lg="8"
+          :lg="6"
         >
           <el-form-item :label="item.label" :prop="item.prop" class="form-item">
             <component
@@ -36,17 +35,18 @@
           
         </el-col>
         <!-- 按钮列：也使用响应式列属性，避免无宽度导致溢出 -->
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" class="all" >
-          <div class="actions">
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
-          <el-button @click="handleReset" type="default">重置</el-button>
-          </div>
-        </el-col>
+        
 
       </el-row>
-    </el-form>
 
-    </div>
+    </el-form>
+  </div>
+  <div class="actions">
+    <el-button type="primary" @click="handleSearch">搜索</el-button>
+    <el-button @click="handleReset" type="default">重置</el-button>
+  </div>
+
+  </div>
 
 
 </template>
@@ -111,29 +111,27 @@ const handleReset = () => {
 <style lang="scss" scoped>
 /* 父容器：保证占满父宽度并使用 border-box，防止 el-row 负外边距导致溢出 */
 .table-search {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0;
-  overflow: hidden;
+  display: flex;
+  padding: 10px;
+.table{
+width: 100%;
 }
-
 
 /* 按钮列样式（保留） */
 .actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 20px;
-  width: 100%;
+  
+  /* 核心逻辑：从原来的 flex-start（靠左）改为 flex-end（靠右） */
+  justify-content: flex-end; 
+  
+  width:168px;
+
+}
 }
 
-.all{
-  flex: auto;
-  padding: 0 12px;
-}
-// .form-col {
-//   padding:1px;
-// }
+
+
+
 </style>
