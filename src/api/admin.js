@@ -63,3 +63,7 @@ export const getEmotionList=(params)=>{
 export const deleteEmotionDiary=(id)=>{
     return service.delete("/emotion-diary/admin/"+id);
 }
+
+export const getDataAnalyticsOverview=()=>{
+    return service.get("/data-analytics/overview");
+}
