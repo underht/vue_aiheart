@@ -176,7 +176,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import PageHead from '../components/PageHead.vue';
 import TableSearch from '../components/TableSearch.vue';
-import { getEmotionList } from '@/api/admin';
+import { getEmotionList,deleteEmotionDiary } from '@/api/admin';
 
 const searchConfig = ref([
   {
@@ -279,7 +279,15 @@ const onResetData = () => {
   pagination.currentPage = 1;
   fetchListData();
 };
-
+const handleDelete = async (id) => {
+    try {
+        const res=await deleteEmotionDiary(id);
+        console.log(res);
+        fetchListData();
+    } catch (error) {
+        console.log(error);
+    }
+};
 onMounted(async () => {
     await fetchListData();
 });

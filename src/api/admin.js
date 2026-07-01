@@ -60,3 +60,6 @@ export const getConsultation=(sessionId)=>{
 export const getEmotionList=(params)=>{
     return service.get("/emotion-diary/admin/page",params);
 }
+export const deleteEmotionDiary=(id)=>{
+    return service.delete("/emotion-diary/admin/"+id);
+}
