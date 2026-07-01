@@ -22,7 +22,7 @@
                 <el-table-column prop="startedAt" label="时间"  width="100" align="center"/>
                 <el-table-column label="操作"  width="100" align="center">
                     <template #default="scope">
-                        <el-button size="small" @click="handleEdit(scope.row)">查看</el-button>
+                        <el-button size="small" @click="handleview(scope.row.id)">查看</el-button>
                     </template>
                 </el-table-column>
 
@@ -30,19 +30,37 @@
         </div>
         <div>
         <el-pagination layout="prev, pager, next" :total="pagetotal" 
-        :page-size="pagination.size" 
+        :page-size="Number(pagination.size)"
         @change="handlePageChange"
         class="pagination"
         />
         </div>
+        <div>
+            <el-dialog v-model="dialogTableVisible" title="Shipping address" width="800" class="dialog">
+                <el-card 
+                    v-for="item in sessiondata" :key="item" 
+                    class="card"
+                    shadow="never"
+                >
+                <p v-if="item.senderTypeDesc==='用户'">
+                    用户：
+                    {{item.content}}
+                </p>
+                <p v-if="item.senderTypeDesc==='AI助手'">
+                    ai助手:
+                    {{item.content}}
+                </p>
+                </el-card>
 
+            </el-dialog>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { onMounted, reactive ,ref} from 'vue';
 import PageHead from '../components/PageHead.vue';
-import {getConsultationPage}from '@/api/admin.js'
+import {getConsultationPage,getConsultation}from '@/api/admin.js'
 const handleAdd=()=>{}
 const pagination=reactive({
     currentPage:"1",
@@ -60,8 +78,24 @@ const pagination=reactive({
 const pagetotal=ref(0)
 
 const tableData=ref([])
-const handleEdit=()=>{}
+const sessiondata=ref([])
 
+
+
+
+const handleview=async(id)=>{
+ try{
+        const res=await getConsultation(id)
+        sessiondata.value=res.data
+        console.log("对话",sessiondata);
+        dialogTableVisible.value=true
+    }catch(error){
+        console.log(error);
+        
+    }
+
+}
+const dialogTableVisible=ref(false)
 const handlePageChange=(page)=>{
     pagination.currentPage=page
     getlist()
@@ -83,16 +117,7 @@ const getlist=(async()=>{
 
 onMounted(async()=>{
 getlist()
-    // try{
-    //     const res=await getConsultationPage(pagination)
-    //     const {records,total}=res.data
-    //     console.log("数据",records,total);
-    //     tableData.value=records;
-    //     pagetotal.value=total/pagination.size;
-    // }catch(error){
-    //     console.log(error);
-        
-    // }
+
 })
 </script>
 
@@ -102,5 +127,11 @@ getlist()
     justify-content: center;
     align-items: center;
     padding: 12px 0;
+}
+
+.dialog{
+    .card{
+        margin: 12px 0;
+    }
 }
 </style>

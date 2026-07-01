@@ -54,3 +54,6 @@ export const deleteAarticle=(id)=>{
 export const getConsultationPage=(params)=>{
     return service.get("/psychological-chat/sessions",{params});
 }
+export const getConsultation=(sessionId)=>{
+    return service.get("/psychological-chat/sessions/"+sessionId+"/messages");
+}
