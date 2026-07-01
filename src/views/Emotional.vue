@@ -65,7 +65,7 @@
             <el-table-column label="操作" width="160px">
                 <template #default="{ row }">
                     <el-button @click="showDetails(row)">详情</el-button>
-                    <el-button>删除</el-button>
+                    <el-button @click="handleDelete(row.id)">删除</el-button>
                 </template>
             </el-table-column>
 
@@ -78,9 +78,93 @@
         />
         
 
-        <div class="dialog-container">
-            <el-dialog v-model="dialogTableVisible" title="Shipping address" width="800">
-            
+        <div class="dialog-container" >
+            <el-dialog v-model="dialogTableVisible" title="详情信息" width="800"
+            v-bind="currentDetail"
+            >
+            <div>
+                <el-descriptions title="用户信息" :column="2" border>
+
+                    <el-descriptions-item label="用户名" label-align="right" align="center">
+                    {{ currentDetail.username }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="用户ID" label-align="right" align="center">
+                    {{ currentDetail.userId }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="创建时间" label-align="right" align="center">
+                    {{ currentDetail.createdAt }}
+                    </el-descriptions-item>
+                </el-descriptions>
+                <el-descriptions title="情绪信息" :column="2" border>
+                    <el-descriptions-item label="情绪类型" label-align="right" align="center">
+                    {{ currentDetail.dominantEmotion }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="情绪分数" label-align="right" align="center">
+
+                        <el-rate
+                            :model-value="currentDetail.moodScore"
+                            disabled
+                            allow-half
+                            :max="10"
+                        />
+                    {{ currentDetail.moodScore }} 分
+                    </el-descriptions-item>
+                    <el-descriptions-item label="压力等级" label-align="right" align="center">
+                    {{ currentDetail.stressLevel }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="睡眠质量" label-align="right" align="center">
+                    {{ currentDetail.sleepQuality }}
+                    </el-descriptions-item>
+                </el-descriptions>
+                <el-descriptions title="日记信息" :column="2" border>
+                    <el-descriptions-item label="情绪触发因素" label-align="right" align="center">
+                        {{ currentDetail.emotionTriggers }}
+                    </el-descriptions-item>
+
+                    <el-descriptions-item label="日记内容" label-align="right" align="center">
+                        {{ currentDetail.diaryContent }}
+                    </el-descriptions-item>
+                </el-descriptions>
+                <el-descriptions title="AI 情绪分析" :column="2" border>
+                    <el-descriptions-item label="主要情绪" label-align="right" align="center">
+                        {{ aidata?.primaryEmotion }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="情绪性质" label-align="right" align="center">
+                        <p>
+                            {{ aidata?.isNegative ? '消极' : '积极' }}
+                        </p>
+                    </el-descriptions-item>
+                    <el-descriptions-item label="风险等级" label-align="right" align="center">
+                        {{ aidata?.riskLevel }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="情绪分数" label-align="right" align="center">
+                            <el-progress :text-inside="true" :stroke-width="26" :percentage="aidata?.emotionScore" />
+                    </el-descriptions-item>
+
+                </el-descriptions>
+                <div>
+                    <p>专业建议</p>
+                    <el-card >
+                        <p >{{ aidata?.suggestion}}</p>
+                    </el-card>
+                </div>
+                <div>
+                    <p>风险描述</p>
+                    <el-card >
+                        <p >{{ aidata?.riskDescription}}</p>
+                    </el-card>
+                </div>
+
+                <div>
+                    <p>改善建议</p>
+                    <el-card >
+                        <p v-for="(item, index) in aidata?.improvementSuggestions" :key="index">{{ item }}</p>
+                    </el-card>
+                </div>
+                <div>
+                    <p>分析时间:{{ aidata?.timestamp }}</p>
+                </div>
+            </div>
             </el-dialog>
         </div>
     </div>
@@ -135,9 +219,15 @@ const pagination = reactive({
     total: 0
 });
 const dialogTableVisible=ref(false)
-
+const currentDetail=ref();
+const aidata=ref(); 
 const showDetails=(row)=>{
-    dialogTableVisible.value=true
+    currentDetail.value=row;
+    if(row.aiEmotionAnalysis){
+        aidata.value=JSON.parse(row.aiEmotionAnalysis);
+        console.log("ai分析",aidata.value);
+    }
+    dialogTableVisible.value=true;
 
 }
 
