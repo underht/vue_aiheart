@@ -22,7 +22,7 @@
                 </span>
                 <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item @click="handleAction1">Action 1</el-dropdown-item>
+                    <el-dropdown-item @click="handlelogout">登出</el-dropdown-item>
                 </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -38,8 +38,8 @@ const handleCollapse=()=>{
     useAdminStore().toggleCollapse()
     console.log('Navbar collapsed:', useAdminStore().isCollapsing)
 }
-const handleAction1 = () => {
-    console.log('Action 1 clicked')
+const handlelogout = () => {
+    console.log('Logout clicked')
 }
 const router = useRouter();
 const route = useRoute();
@@ -51,7 +51,7 @@ const route = useRoute();
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0;
     background-color: #ffffff;
     height: 60px;
     .flex-box {

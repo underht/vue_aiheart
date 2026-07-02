@@ -17,11 +17,13 @@
                 </div>
             </div>
             <el-menu-item @click="selectMenu(key)" index="1" v-for="(item, key) in router.options.routes[0].children" :key="item.path">
-            <el-icon>
-                <component :is="item.meta.icon" />
 
-            </el-icon>
-            <span>{{ item.meta.title }}</span>
+                <el-icon>
+                    <component :is="item.meta.icon" />
+                </el-icon>
+                <span  style="margin-left: 10px;">{{ item.meta.title }}</span>
+
+
             </el-menu-item>
         
         </el-menu>
