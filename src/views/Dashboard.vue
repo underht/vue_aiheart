@@ -156,6 +156,9 @@
                 :xs="24"
                 >
                 <el-card shadow="always">
+
+
+                    <div class="chartcontainer">
                     <div class="chartheader">
                         <div class="chartheaderitem">
                             <p>平均咨询时长</p>
@@ -169,8 +172,7 @@
                             <p>活跃用户</p>
                             <p>{{ overviewData?.systemOverview?.activeUsers }}</p>
                         </div>
-                    </div>
-                    <div class="chartcontainer">
+                    </div> 
                         <div ref="consultationChartRef" style="width: 100%; height: 300px;">
 
                         </div>
@@ -180,6 +182,25 @@
                 </el-col>
 
 
+            </el-row>
+            <el-row style="width: 100%;">
+                <el-col
+                :span="24"
+                :xl="24"
+                :lg="24"
+                :md="24"
+                :sm="24"
+                :xs="24"
+                >
+
+                <el-card shadow="always">
+                    <div class="chartcontainer">
+                        <div ref="userActivityChartRef" style="width: 100%; height: 300px;">
+
+                        </div>
+                    </div>                    
+                </el-card>
+            </el-col>
             </el-row>
         </div>
         
@@ -195,6 +216,7 @@ import users from '@/assets/users.png';
 import comments from '@/assets/comments.png';
 import smile from '@/assets/smile.png';
 import * as echarts from 'echarts';
+
 
 const overviewData = ref();
 
@@ -333,10 +355,100 @@ const initConsultationChart = () => {
     consultationChart.setOption(option);
 };
 
+
+let userActivityChart=null;
+const userActivityChartRef = ref();
+
+const initUserActivityChart = () => {
+    if(!userActivityChartRef.value) return;//没有就退出
+    if(userActivityChart){//销毁旧的
+        userActivityChart.dispose();
+    }
+    userActivityChart = echarts.init(userActivityChartRef.value);
+    const trendData = overviewData.value?.userActivity;
+    const option = {
+    // 【新增】全局调色盘，ECharts 会按照顺序自动为系列分发颜色
+    color: ['#5470c6', '#91cc75', '#fac858', '#ee6666'], 
+
+    title: {
+        text: '用户活跃度趋势'
+    },
+    tooltip: {
+        trigger: 'axis' 
+    },
+    legend: {
+        data: ['活跃用户', '新用户','日记用户','咨询用户']  
+    },
+    xAxis: {
+        type: 'category',
+        data: trendData?.map(item => item.date) || []
+    },
+    yAxis: [
+        { type: 'value', name: '用户数量' }, 
+    ],
+    series: [
+        {
+            name: '活跃用户',
+            type: 'line',
+            data: trendData?.map(item => item.activeUsers) || [],
+            // 【显式指定颜色】确保线条、拐点、阴影颜色正常
+            itemStyle: {
+                color: '#5470c6'
+            },
+            lineStyle: {
+                width: 3 // 把线加粗一点，看得更清楚
+            }
+        },
+        {
+            name: '新用户',
+            type: 'line',
+
+            data: trendData?.map(item => item.newUsers) || [],
+            // 【显式指定颜色】
+            itemStyle: {
+                color: '#91cc75'
+            },
+            lineStyle: {
+                width: 3
+            }
+        },
+        {
+            name: '日记用户',
+            type: 'line',
+
+            data: trendData?.map(item => item.diaryUsers) || [],
+            // 【显式指定颜色】
+            itemStyle: {
+                color: '#fac858'
+            },
+            lineStyle: {
+                width: 3
+            }
+        },
+        {
+            name: '咨询用户',
+            type: 'line',
+
+            data: trendData?.map(item => item.consultationUsers) || [],
+            // 【显式指定颜色】
+            itemStyle: {
+                color: '#ee6666'
+            },
+            lineStyle: {
+                width: 3
+            }
+        }
+    ]
+};
+    userActivityChart.setOption(option);
+};
+
+
 onMounted(async() => {
     await fetchOverviewData();
     initEmotionalChart();
     initConsultationChart();
+    initUserActivityChart();
 });
 
 </script>
@@ -345,28 +457,38 @@ onMounted(async() => {
 .graph{
     padding: 6px 6px;
     overflow: hidden;
-    .chartheader{
+    .chartcontainer{
+        height: 400px;
         display: flex;
-
-        width: 100%;
+        flex-direction: column;
         justify-content:center;
         align-items:center;
-        .chartheaderitem{
+        padding: 0;
+        .chartheader{
             display: flex;
+            height: 80px;
             width: 100%;
             justify-content:center;
             align-items:center;
-            flex-direction: column;
-            p{
+            .chartheaderitem{
                 display: flex;
+                width: 100%;
                 justify-content:center;
                 align-items:center;
-                margin: 0;
-                font-size: 12px;
-                color: #666;
+                flex-direction: column;
+                p{
+                    display: flex;
+                    justify-content:center;
+                    align-items:center;
+                    margin: 0;
+                    font-size: 12px;
+                    color: #666;
+                }
             }
         }
+        
     }
+    
     .el-col{
         padding: 6px 6px;
     }
