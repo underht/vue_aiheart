@@ -11,43 +11,23 @@
             :gutter="10"
             v-loading="loading"
             >
-                <el-col 
-                :span="6"
-                :xl="6"
-                :lg="6"
-                :md="6"
-                :sm="12"
-                :xs="12"
-                >
-
-                    <el-card  shadow="always" >
-                        <div class="cards">
-                            <div class="img">
-
-                            </div>
-                            <div class="words">
-                                <p>总对话数{{ overviewData.systemOverview.totalSessions }}</p>
-                                <p>今日对话数{{ overviewData.systemOverview.todayNewSessions }}</p>
-                            </div>
-                        </div>
-                        
-                    </el-card>
-
-
-                </el-col>
             <el-col 
                 :span="6"
                 :xl="6"
                 :lg="6"
-                :md="6"
+                :md="12"
                 :sm="12"
-                :xs="12"
+                :xs="24"
                 >
 
                         <el-card  shadow="always">
                             <div class="cards">
                             <div class="img">
-
+                                <el-image :src="users"
+                                    :preview-src-list="srcList"
+                                    fit="cover"
+                                    show-progress>
+                                </el-image>
                             </div>
                             <div class="words">
                             <p>总用户数{{ overviewData.systemOverview.totalUsers }}</p>
@@ -61,20 +41,53 @@
                     
                 
                 </el-col>
+                <el-col 
+                :span="6"
+                :xl="6"
+                :lg="6"
+                :md="12"
+                :sm="12"
+                :xs="24"
+                >
+
+                    <el-card  shadow="always" >
+                        <div class="cards">
+                            <div class="img">
+                                <el-image :src="comments"
+                                    :preview-src-list="srcList"
+                                    fit="cover"
+                                    show-progress>
+                                </el-image>
+                            </div>
+                            <div class="words">
+                                <p>总对话数{{ overviewData.systemOverview.totalSessions }}</p>
+                                <p>今日对话数{{ overviewData.systemOverview.todayNewSessions }}</p>
+                            </div>
+                        </div>
+                        
+                    </el-card>
+
+
+                </el-col>
+
             <el-col 
                 :span="6"
                 :xl="6"
                 :lg="6"
-                :md="6"
+                :md="12"
                 :sm="12"
-                :xs="12"
+                :xs="24"
                 >
 
                         
                     <el-card  shadow="always">
                     <div class="cards">
                         <div class="img">
-
+                                <el-image :src="like"
+                                    :preview-src-list="srcList"
+                                    fit="cover"
+                                    show-progress>
+                                </el-image>
                         </div>
                         <div class="words">
                             <p>总日记数{{ overviewData.systemOverview.totalDiaries }}</p>
@@ -90,15 +103,19 @@
                 :span="6"
                 :xl="6"
                 :lg="6"
-                :md="6"
+                :md="12"
                 :sm="12"
-                :xs="12"
+                :xs="24"
                 >
 
                 <el-card  shadow="always">
                     <div class="cards">                            
-                            <div class="img">
-
+                            <div class="img" >
+                                <el-image :src="smile"
+                                    :preview-src-list="srcList"
+                                    fit="cover"
+                                    show-progress>
+                                </el-image>
                             </div>
                             <div class="words">
                                <p>平均情绪分数{{ overviewData.systemOverview.avgMoodScore }}</p>
@@ -118,7 +135,10 @@
 import PageHead from '../components/PageHead.vue';
 import { getDataAnalyticsOverview } from '@/api/admin';
 import { ref, onMounted } from 'vue';
-
+import like from '@/assets/like.png';
+import users from '@/assets/users.png';
+import comments from '@/assets/comments.png';
+import smile from '@/assets/smile.png';
 const overviewData = ref();
 
 const fetchOverviewData = async () => {
@@ -153,10 +173,19 @@ onMounted(() => {
 
         .img{
             justify-content:center;
-            height: 60px;
-            width: 60px;
-            background-color: #f5f5f5;
+            height: 80px;
+            width:  80px;
+            background-color: #a3a3a3;
+            border-radius: 8px;        /* 设置圆角大小，如果是 50% 则会变成正圆形 */
+            overflow: hidden;          /* 关键！裁切掉内部图片超出圆角部分的直角 */
+            display: flex;
+                justify-content:center;
+                align-items:center;
+            .el-image {
+                width:  80%;
+                height: 80%;
 
+            }
         }
         .words{
             color: #666;
