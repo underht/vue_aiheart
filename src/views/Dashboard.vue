@@ -156,8 +156,22 @@
                 :xs="24"
                 >
                 <el-card shadow="always">
+                    <div class="chartheader">
+                        <div class="chartheaderitem">
+                            <p>平均咨询时长</p>
+                            <p>{{  overviewData?.consultationStats?.avgDurationMinutes}}</p>
+                        </div>
+                        <div class="chartheaderitem">
+                            <p>总咨询次数</p>
+                            <p>{{  overviewData?.consultationStats?.totalSessions}}</p>
+                        </div>
+                        <div class="chartheaderitem">
+                            <p>活跃用户</p>
+                            <p>{{ overviewData?.systemOverview?.activeUsers }}</p>
+                        </div>
+                    </div>
                     <div class="chartcontainer">
-                        <div ref="" style="width: 100%; height: 300px;">
+                        <div ref="consultationChartRef" style="width: 100%; height: 300px;">
 
                         </div>
                     </div>                    
@@ -196,6 +210,7 @@ const fetchOverviewData = async () => {
     }
 };
 const loading = ref(false);
+
 let emotionalChart=null;
 const emotionalChartRef = ref();
 
@@ -258,9 +273,70 @@ const initEmotionalChart = () => {
     emotionalChart.setOption(option);
 };
 
+
+let consultationChart=null;
+const consultationChartRef = ref();
+
+const initConsultationChart = () => {
+    if(!consultationChartRef.value) return;//没有就退出
+    if(consultationChart){//销毁旧的
+        consultationChart.dispose();
+    }
+    consultationChart = echarts.init(consultationChartRef.value);
+
+    const trendData = overviewData.value?.consultationStats?.dailyTrend;
+    const option = {
+    // 【新增】全局调色盘，ECharts 会按照顺序自动为系列分发颜色
+    color: ['#5470c6', '#91cc75'], 
+    
+    title: {
+        text: '咨询活动统计'
+    },
+    tooltip: {
+        trigger: 'axis' 
+    },
+    legend: {
+        data: [ '记录数量', '用户数量' ]
+    },
+    xAxis: {
+        type: 'category',
+        data: trendData?.map(item => item.date) || []
+    },
+    yAxis: [
+        { type: 'value', name: '记录数量' }, 
+        { type: 'value', name: '用户数量' }
+    ],
+    series: [
+        {
+            name: '记录数量',
+            type: 'bar',
+            data: trendData?.map(item => item.sessionCount) || [],
+            // 【显式指定颜色】确保线条、拐点、阴影颜色正常
+            itemStyle: {
+                color: 'rgba(84, 112, 198, 1)'
+            },
+            barWidth: 5// 设置柱状图宽度
+        },
+        {
+            name: '用户数量',
+            type: 'bar',
+            yAxisIndex: 1,
+            data: trendData?.map(item => item.userCount) || [],
+            // 【显式指定颜色】
+            itemStyle: {
+                color: 'rgba(145, 204, 117, 1)'  
+            },
+            barWidth: 5
+        }
+    ]
+};
+    consultationChart.setOption(option);
+};
+
 onMounted(async() => {
     await fetchOverviewData();
     initEmotionalChart();
+    initConsultationChart();
 });
 
 </script>
@@ -269,6 +345,28 @@ onMounted(async() => {
 .graph{
     padding: 6px 6px;
     overflow: hidden;
+    .chartheader{
+        display: flex;
+
+        width: 100%;
+        justify-content:center;
+        align-items:center;
+        .chartheaderitem{
+            display: flex;
+            width: 100%;
+            justify-content:center;
+            align-items:center;
+            flex-direction: column;
+            p{
+                display: flex;
+                justify-content:center;
+                align-items:center;
+                margin: 0;
+                font-size: 12px;
+                color: #666;
+            }
+        }
+    }
     .el-col{
         padding: 6px 6px;
     }
