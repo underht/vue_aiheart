@@ -1,9 +1,6 @@
 <template>
     <div>
         <PageHead title="数据分析"  >
-            <template #actions>
-                <el-button type="primary">新增</el-button>
-            </template>
         </PageHead>
         <div class="graph">
             <el-row 

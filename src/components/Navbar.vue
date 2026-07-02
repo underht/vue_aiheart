@@ -33,7 +33,7 @@
 <script setup>
 import { Expand } from '@element-plus/icons-vue'
 import { useAdminStore } from '@/stores/admin'
-
+import { useRouter } from 'vue-router'
 const handleCollapse=()=>{
     useAdminStore().toggleCollapse()
     console.log('Navbar collapsed:', useAdminStore().isCollapsing)

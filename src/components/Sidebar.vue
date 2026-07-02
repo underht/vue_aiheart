@@ -59,6 +59,7 @@ const isCollapsing = computed(() => useAdminStore().isCollapsing);
 .brand {
   display: flex;
   align-items: center; /* 垂直居中 */
+  margin-left: 13.6px;
   gap: 10px; /* 图片和文字之间的间距 */
   height: 60px;
   .ui {
