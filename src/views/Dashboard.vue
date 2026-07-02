@@ -8,10 +8,11 @@
         <div class="graph">
             <el-row 
             v-if="overviewData"
-            :gutter="10"
+
             v-loading="loading"
+
             >
-            <el-col 
+                <el-col 
                 :span="6"
                 :xl="6"
                 :lg="6"
@@ -21,7 +22,7 @@
                 >
 
                         <el-card  shadow="always">
-                            <div class="cards">
+                            <div class="incards">
                             <div class="img">
                                 <el-image :src="users"
                                     
@@ -51,7 +52,7 @@
                 >
 
                     <el-card  shadow="always" >
-                        <div class="cards">
+                        <div class="incards">
                             <div class="img">
                                 <el-image :src="comments"
                                     
@@ -81,7 +82,7 @@
 
                         
                     <el-card  shadow="always">
-                    <div class="cards">
+                    <div class="incards">
                         <div class="img">
                                 <el-image :src="like"
                                     
@@ -109,7 +110,7 @@
                 >
 
                 <el-card  shadow="always">
-                    <div class="cards">                            
+                    <div class="incards">                            
                             <div class="img" >
                                 <el-image :src="smile"
                                     
@@ -124,6 +125,9 @@
                 </el-card>
 
                 </el-col>
+
+
+            
             </el-row>
             <el-row>
                 <el-col
@@ -134,12 +138,33 @@
                 :sm="24"
                 :xs="24"
                 >
-                <div class="chartcontainer">
-                    <div ref="emotionalChartRef" style="width: 100%; height: 300px;">
+                <el-card shadow="always">
+                    <div class="chartcontainer">
+                        <div ref="emotionalChartRef" style="width: 100%; height: 300px;">
 
-                    </div>
-                </div>
+                        </div>
+                    </div>                    
+                </el-card>
+
                 </el-col>
+                 <el-col
+                :span="12"
+                :xl="12"
+                :lg="12"
+                :md="24"
+                :sm="24"
+                :xs="24"
+                >
+                <el-card shadow="always">
+                    <div class="chartcontainer">
+                        <div ref="" style="width: 100%; height: 300px;">
+
+                        </div>
+                    </div>                    
+                </el-card>
+
+                </el-col>
+
 
             </el-row>
         </div>
@@ -173,6 +198,7 @@ const fetchOverviewData = async () => {
 const loading = ref(false);
 let emotionalChart=null;
 const emotionalChartRef = ref();
+
 const initEmotionalChart = () => {
     if(!emotionalChartRef.value) return;//没有就退出
     if(emotionalChart){//销毁旧的
@@ -181,46 +207,59 @@ const initEmotionalChart = () => {
     emotionalChart = echarts.init(emotionalChartRef.value);
     const trendData = overviewData.value?.emotionTrend;
     const option = {
-        // // ECharts 配置项
-        title: {
-            text: '情绪趋势'
-        },
-        tooltip: {},
-        legend: {
-            data: ['情绪得分', '记录数量']
-        },
-        xAxis: {
-            type: 'category',
-            data: trendData?.map(item => item.date) || []
-        },
-        yAxis: [{
-            type: 'value',
+    // 【新增】全局调色盘，ECharts 会按照顺序自动为系列分发颜色
+    color: ['#5470c6', '#91cc75'], 
+    
+    title: {
+        text: '情绪趋势'
+    },
+    tooltip: {
+        trigger: 'axis' 
+    },
+    legend: {
+        data: ['情绪得分', '记录数量'] 
+    },
+    xAxis: {
+        type: 'category',
+        data: trendData?.map(item => item.date) || []
+    },
+    yAxis: [
+        { type: 'value', name: '情绪得分' }, 
+        { type: 'value', name: '记录数量' }
+    ],
+    series: [
+        {
             name: '情绪得分',
-
-        }, {
-            type: 'value',
-            name: '记录数量',
-
-        }],
-        series: [
-            {
-                name: '情绪得分',
-                type: 'line',
-                data: trendData?.map(item => item.avgMoodScore) || []
+            type: 'line',
+            data: trendData?.map(item => item.avgMoodScore) || [],
+            // 【显式指定颜色】确保线条、拐点、阴影颜色正常
+            itemStyle: {
+                color: '#5470c6' // 经典科技蓝
             },
-            {
-                name: '记录数量',
-                type: 'line',
-                yAxisIndex: 1,
-                data: trendData?.map(item => item.recordCount) || []
+            lineStyle: {
+                width: 3 // 把线加粗一点，看得更清楚
             }
-        ]
-    };
+        },
+        {
+            name: '记录数量',
+            type: 'line',
+            yAxisIndex: 1,
+            data: trendData?.map(item => item.recordCount) || [],
+            // 【显式指定颜色】
+            itemStyle: {
+                color: '#91cc75' // 舒适清新绿
+            },
+            lineStyle: {
+                width: 3
+            }
+        }
+    ]
+};
     emotionalChart.setOption(option);
 };
 
-onMounted(() => {
-    fetchOverviewData();
+onMounted(async() => {
+    await fetchOverviewData();
     initEmotionalChart();
 });
 
@@ -228,15 +267,18 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .graph{
-    padding: 12px 12px;
-    .cards{     
+    padding: 6px 6px;
+    overflow: hidden;
+    .el-col{
+        padding: 6px 6px;
+    }
+    .incards{     
         display: flex;
         justify-content:center;
         align-items:center;
         flex-direction: row;
         height: 80px;
         column-gap: 15px;
-
         .img{
             justify-content:center;
             height: 80px;
