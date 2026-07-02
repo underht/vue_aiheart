@@ -1,7 +1,7 @@
 <template>
     <div>
-        <PageHead title="数据分析"  >
-        </PageHead>
+        <!-- <PageHead title="数据分析"  >
+        </PageHead> -->
         <div class="graph">
             <el-row 
             v-if="overviewData"

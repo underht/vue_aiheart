@@ -5,7 +5,7 @@
             <!-- //button自带的插槽里面有slot -->
 
             <div class="pagetitle">
-                导航栏
+                {{ route.meta.title }}
             </div>
         </div>
         <div>
@@ -33,7 +33,7 @@
 <script setup>
 import { Expand } from '@element-plus/icons-vue'
 import { useAdminStore } from '@/stores/admin'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 const handleCollapse=()=>{
     useAdminStore().toggleCollapse()
     console.log('Navbar collapsed:', useAdminStore().isCollapsing)
@@ -41,6 +41,8 @@ const handleCollapse=()=>{
 const handleAction1 = () => {
     console.log('Action 1 clicked')
 }
+const router = useRouter();
+const route = useRoute();
 </script>
 
 

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <PageHead title="情绪日志">
+        <!-- <PageHead title="情绪日志">
             <template #actions>
                 <el-button type="primary">新增</el-button>
             </template>
-        </PageHead>
+        </PageHead> -->
         
         <TableSearch :formItems="searchConfig"
             @search="handleSearch" 

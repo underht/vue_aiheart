@@ -1,10 +1,10 @@
 <template>
     <div>
-        <PageHead title="咨询记录" >
+        <!-- <PageHead title="咨询记录" >
             <template #actions>
 
             </template>
-        </PageHead>
+        </PageHead> -->
         <div>
             <el-table :data="tableData" style="width: 100%" class="etable">
                 <el-table-column prop="id" label="会话id"  width="100" align="center">
