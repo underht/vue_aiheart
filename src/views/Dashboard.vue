@@ -5,7 +5,7 @@
                 <el-button type="primary">新增</el-button>
             </template>
         </PageHead>
-        <div class="smallgraph">
+        <div class="graph">
             <el-row 
             v-if="overviewData"
             :gutter="10"
@@ -24,7 +24,7 @@
                             <div class="cards">
                             <div class="img">
                                 <el-image :src="users"
-                                    :preview-src-list="srcList"
+                                    
                                     fit="cover"
                                     show-progress>
                                 </el-image>
@@ -54,7 +54,7 @@
                         <div class="cards">
                             <div class="img">
                                 <el-image :src="comments"
-                                    :preview-src-list="srcList"
+                                    
                                     fit="cover"
                                     show-progress>
                                 </el-image>
@@ -84,7 +84,7 @@
                     <div class="cards">
                         <div class="img">
                                 <el-image :src="like"
-                                    :preview-src-list="srcList"
+                                    
                                     fit="cover"
                                     show-progress>
                                 </el-image>
@@ -112,7 +112,7 @@
                     <div class="cards">                            
                             <div class="img" >
                                 <el-image :src="smile"
-                                    :preview-src-list="srcList"
+                                    
                                     fit="cover"
                                     show-progress>
                                 </el-image>
@@ -125,7 +125,23 @@
 
                 </el-col>
             </el-row>
+            <el-row>
+                <el-col
+                :span="12"
+                :xl="12"
+                :lg="12"
+                :md="24"
+                :sm="24"
+                :xs="24"
+                >
+                <div class="chartcontainer">
+                    <div ref="emotionalChartRef" style="width: 100%; height: 300px;">
 
+                    </div>
+                </div>
+                </el-col>
+
+            </el-row>
         </div>
         
     </div>
@@ -139,6 +155,8 @@ import like from '@/assets/like.png';
 import users from '@/assets/users.png';
 import comments from '@/assets/comments.png';
 import smile from '@/assets/smile.png';
+import * as echarts from 'echarts';
+
 const overviewData = ref();
 
 const fetchOverviewData = async () => {
@@ -153,15 +171,63 @@ const fetchOverviewData = async () => {
     }
 };
 const loading = ref(false);
+let emotionalChart=null;
+const emotionalChartRef = ref();
+const initEmotionalChart = () => {
+    if(!emotionalChartRef.value) return;//没有就退出
+    if(emotionalChart){//销毁旧的
+        emotionalChart.dispose();
+    }
+    emotionalChart = echarts.init(emotionalChartRef.value);
+    const trendData = overviewData.value?.emotionTrend;
+    const option = {
+        // // ECharts 配置项
+        title: {
+            text: '情绪趋势'
+        },
+        tooltip: {},
+        legend: {
+            data: ['情绪得分', '记录数量']
+        },
+        xAxis: {
+            type: 'category',
+            data: trendData?.map(item => item.date) || []
+        },
+        yAxis: [{
+            type: 'value',
+            name: '情绪得分',
+
+        }, {
+            type: 'value',
+            name: '记录数量',
+
+        }],
+        series: [
+            {
+                name: '情绪得分',
+                type: 'line',
+                data: trendData?.map(item => item.avgMoodScore) || []
+            },
+            {
+                name: '记录数量',
+                type: 'line',
+                yAxisIndex: 1,
+                data: trendData?.map(item => item.recordCount) || []
+            }
+        ]
+    };
+    emotionalChart.setOption(option);
+};
+
 onMounted(() => {
     fetchOverviewData();
-
+    initEmotionalChart();
 });
 
 </script>
 
 <style lang="scss" scoped>
-.smallgraph{
+.graph{
     padding: 12px 12px;
     .cards{     
         display: flex;
