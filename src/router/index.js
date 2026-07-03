@@ -1,6 +1,7 @@
 import { createRouter ,createWebHistory} from "vue-router";
 import BackendLayout from "../components/BackendLayout.vue";
 import AuthLayout from "../components/AuthLayout.vue";
+import FrontendLayout from "../components/FrontendLayout.vue";
 
 const routes = [
     {
@@ -55,6 +56,12 @@ const routes = [
                  }
             }
         ]
+    },{
+        path: "",
+        component: FrontendLayout,
+        meta: { title: "首页",
+            icon: "Home"
+         }
     }
 ];
 
@@ -68,14 +75,11 @@ router.beforeEach((to, from, next) => {
     const roleType = localStorage.getItem('roleType');
     if(token) {
         if(roleType==2) {
-            if(to.path.startsWith('/back')) {
-                next();
-            } else {
-                next();
-            }
+            next();
         }else{
             if(to.path.startsWith('/back')) {
-                next({ path: '/' });
+                next();
+
             } else {
                 next();
             }
@@ -83,8 +87,9 @@ router.beforeEach((to, from, next) => {
     } else {
         if(to.path.startsWith('/back')) {
             next({ path: '/auth/login' });
+        }else{
+            next();
         }
-        next();
     }
 });
 

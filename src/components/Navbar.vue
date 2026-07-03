@@ -58,7 +58,9 @@ const handlelogout = async () => {
     router.push('/auth/login')
     ElMessage.success('退出成功')
     localStorage.removeItem('token')
-    localStorage.removeItem('userInfo') 
+    localStorage.removeItem('userinfo') ;
+    localStorage.removeItem('roleType') ;
+
   } catch (error) {
     // 点"取消"或关闭弹框会进这里，不用处理
     console.log('取消登出')
