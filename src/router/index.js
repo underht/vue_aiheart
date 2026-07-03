@@ -78,7 +78,7 @@ router.beforeEach((to, from, next) => {
             next();
         }else{
             if(to.path.startsWith('/back')) {
-                next();
+            next({ path: '/auth/login' });
 
             } else {
                 next();
