@@ -71,3 +71,6 @@ export const getDataAnalyticsOverview=()=>{
 export const logoutApi = () => {
     return service.post("/user/logout");
 }
+export const register = (data) => {
+    return service.post("/user/register", data);
+}
