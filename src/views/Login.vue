@@ -65,8 +65,13 @@ const handleLogin = async () => {
     try {
         const response = await login(formData);
         localStorage.setItem("token", response.data.token);
+        // console.log('response is:', response);
+
+        localStorage.setItem('userinfo', response.data.userInfo);
+        localStorage.setItem('roleType', response.data.roleType);
+
         ElMessage.success("登录成功");
-        console.log('user is:', formData.username);
+        // console.log('user is:', formData.username);
 
         if (formData.username === "admin") {
             // localStorage.setItem("role", "admin");

@@ -455,7 +455,7 @@ onMounted(async() => {
     padding: 6px 6px;
     overflow: hidden;
     .chartcontainer{
-        height: 400px;
+        height: 350px;
         display: flex;
         flex-direction: column;
         justify-content:center;
@@ -463,7 +463,7 @@ onMounted(async() => {
         padding: 0;
         .chartheader{
             display: flex;
-            height: 80px;
+            height: 40px;
             width: 100%;
             justify-content:center;
             align-items:center;

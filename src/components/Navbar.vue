@@ -34,15 +34,38 @@
 import { Expand } from '@element-plus/icons-vue'
 import { useAdminStore } from '@/stores/admin'
 import { useRouter, useRoute } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { logoutApi } from '@/api/admin'
+import { lo } from 'element-plus/es/locale/index.mjs'
 const handleCollapse=()=>{
     useAdminStore().toggleCollapse()
     console.log('Navbar collapsed:', useAdminStore().isCollapsing)
 }
-const handlelogout = () => {
-    console.log('Logout clicked')
-}
+
 const router = useRouter();
 const route = useRoute();
+
+const handlelogout = async () => {
+  try {
+    await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    
+    // 用户点了"确定"，执行登出
+    await logoutApi()
+    router.push('/auth/login')
+    ElMessage.success('退出成功')
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo') 
+  } catch (error) {
+    // 点"取消"或关闭弹框会进这里，不用处理
+    console.log('取消登出')
+  }
+}
+
+
 </script>
 
 
