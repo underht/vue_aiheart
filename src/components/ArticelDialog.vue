@@ -185,7 +185,7 @@ watch(() => props.article, (newVal) => {
         
     }else{
         handleRemove()
-        formRef.value.resetFields()
+        formRef.value?.resetFields()
         fromdata.tagsArray=[]
         fromdata.summary=""
         testBoxRef.value?.clear()  // 调用子组件暴露的方法

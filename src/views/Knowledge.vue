@@ -60,9 +60,10 @@
        />
     </div>
 
-        <ArticelDialog v-model="dialogTableVisible" :categories="categories" 
+        <ArticelDialog 
+        v-model="dialogTableVisible" 
+        :categories="categories" 
         @uploadSussess="handleUploadSussess" 
-        v-model:dialogTableVisible="dialogTableVisible"
         :article="articleData"
         
         />
