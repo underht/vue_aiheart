@@ -21,7 +21,13 @@
 
         <div class="action-section">
           <router-link to="/auth/login" class="login-link" v-if="!islogin">登录</router-link>
-          <el-button to="/auth/register" type="primary" class="register-btn" v-if="!islogin">注册</el-button>
+          <router-link 
+            v-if="!islogin" 
+            to="/auth/register" 
+            class="register-btn"
+          >
+            <p style="color: aliceblue;margin: 0;">注册</p>
+          </router-link>
           <el-button type="danger" plain class="logout-btn" v-if="islogin" @click="handlelogout">退出登录</el-button>
         </div>
       </div>

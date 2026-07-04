@@ -1,6 +1,6 @@
 <template>
     <div>
-前台咨询
+
     </div>
 </template>
 

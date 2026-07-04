@@ -94,9 +94,9 @@ const form = reactive({
   phone: '',
   password: '',
   confirmPassword: '',
-  gender: 0,
+  gender: 1,
   userType: 1
-})
+});
 
 const validateConfirmPassword = (rule, value, callback) => {
   if (value !== form.password) {
@@ -129,9 +129,10 @@ const rules = {
 }
 
 const handleRegister = async () => {
-    const data=formRef.value;
+
+    console.log("数据：",form);
     try{
-        const res=await register(data);
+        const res=await register(form);
         console.log(res);
         
         if(res.code === '200' || res.success) {

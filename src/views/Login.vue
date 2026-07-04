@@ -64,6 +64,8 @@ const rules = {
 const handleLogin = async () => {
     try {
         const response = await login(formData);
+        console.log(formData);
+        
         localStorage.setItem("token", response.data.token);
         // console.log('response is:', response);
 
