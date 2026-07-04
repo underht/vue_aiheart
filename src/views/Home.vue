@@ -50,6 +50,7 @@ const goToLogs = () => {
   background-color: #588e7e; /* 还原图片中的绿色底色 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
+  overflow-x: auto;
   box-sizing: border-box;
 }
 
@@ -58,7 +59,7 @@ const goToLogs = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 1200px;
   max-width: 1200px;
   padding: 0 40px;
   gap: 80px;
@@ -177,7 +178,7 @@ const goToLogs = () => {
 }
 
 /* 响应式适配：屏幕太小时自动变成上下堆叠，防止挤压变形 */
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
   .hero-container {
     height: auto;
     padding: 60px 0;
@@ -193,5 +194,5 @@ const goToLogs = () => {
   .cta-buttons {
     justify-content: center;
   }
-}
+} */
 </style>

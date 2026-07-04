@@ -11,10 +11,10 @@
 
       <div class="nav-section">
         <div class="nav-links">
-          <router-link to="/home" class="nav-item">首页</router-link>
-          <router-link to="/knowledge" class="nav-item">知识库</router-link>
-          <router-link to="/consultation" class="nav-item" v-if="islogin">AI咨询</router-link>
-          <router-link to="/emotiondiary" class="nav-item" v-if="islogin">情绪日志</router-link>
+          <router-link to="/home" class="nav-item"> <p>首页</p></router-link>
+          <router-link to="/knowledge" class="nav-item"> <p>知识库</p></router-link>
+          <router-link to="/consultation" class="nav-item" v-if="islogin"> <p>AI咨询</p></router-link>
+          <router-link to="/emotiondiary" class="nav-item" v-if="islogin"> <p>情绪日志</p></router-link>
         </div>
 
         <div class="divider" v-if="!islogin"></div>
@@ -101,6 +101,7 @@ onMounted(() => {
 .brand-name {
   font-size: 18px;
   font-weight: 600;
+  width: 160px;
   color: #1e293b;
   letter-spacing: 0.5px;
 }
@@ -116,6 +117,7 @@ onMounted(() => {
 .nav-links {
   display: flex;
   align-items: center;
+    justify-content: center; 
   gap: 28px;
   height: 100%;
 }
@@ -126,11 +128,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   height: 100%;
+  width: 60px;
   font-size: 15px;
   color: #64748b;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.25s ease;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-item:hover {
