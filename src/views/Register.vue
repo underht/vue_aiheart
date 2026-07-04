@@ -6,7 +6,8 @@
     </div>
 
     <div class="header">
-      <h1>用户注册</h1>
+      <h1 class="main-title">创建您的账户</h1>
+      <p class="sub-title">请填写注册信息</p>
     </div>
 
     <div class="form">
@@ -14,11 +15,11 @@
         ref="formRef"
         :model="form"
         :rules="rules"
-        label-width="100px"
+        label-position="top"
         size="large"
       >
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名" clearable />
+        <el-form-item label="用户名或邮箱" prop="username">
+          <el-input v-model="form.username" placeholder="请输入用户名或邮箱" clearable />
         </el-form-item>
 
         <el-form-item label="邮箱" prop="email">
@@ -53,7 +54,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="性别" prop="gender">
+        <el-form-item label="性别" prop="gender" class="hidden-field">
           <el-radio-group v-model="form.gender">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
@@ -61,15 +62,16 @@
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" :loading="loading" @click="handleRegister" style="width: 100%">
-            注册
+        <el-form-item class="submit-item">
+          <el-button type="primary" :loading="loading" @click="handleRegister" class="submit-btn">
+            创建用户
           </el-button>
         </el-form-item>
       </el-form>
 
       <div class="links">
-        <span class="link" @click="$router.push('/auth/login')">已有账号？去登录</span>
+        <span class="text-muted">已有账户？</span>
+        <span class="link" @click="$router.push('/auth/login')">立即登录</span>
       </div>
     </div>
   </div>
@@ -145,58 +147,117 @@ const handleRegister = async () => {
 </script>
 
 <style lang="scss" scoped>
+/* 容器背景调整为白净简约的浅色底色 */
 .container {
-  padding: 16px;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  // gap: 60px;
+  align-items: center;
+  padding: 0;
+  height: 100%;
+  width: 100% ;
+  background-color: #fcfcfc;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
   .back {
+    position: absolute;
+    top: 24px;
+    left: 24px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
-    color: #c0c4cc;
+    color: #909399;
+    font-size: 14px;
+    transition: color 0.25s;
     &:hover {
-      color: #409eff;
+      color: #4a90e2;
     }
   }
 }
 
+/* 顶部文案精细化控制 */
 .header {
   display: flex;
-  padding-left: 50px;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  h1 {
-    margin: 12px 0;
-    color: #e4e7ed;
-    font-weight: 500;
+  margin-top: 20px;
+  margin-bottom: 32px;
+
+  .main-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 12px 0;
+    letter-spacing: 1px;
+  }
+
+  .sub-title {
+    font-size: 15px;
+    color: #8a8a8a;
+    margin: 0;
   }
 }
 
+/* 表单主体宽度与布局优化 */
 .form {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  :deep(.el-form-item__label) {
-    color: #c0c4cc;
-  }
-  :deep(.el-input__wrapper) {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  :deep(.el-radio) {
-    color: #c0c4cc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin: 0 ;
+  padding: 0 ;
+  .el-form-item{
+    width: 100% ;
   }
 }
 
+/* 隐藏图片中不需要展示的项，同时保证业务逻辑字段的完整 */
+.hidden-field {
+  display: none !important;
+}
+
+
+/* 提交按钮：还原精美蓝色长条 */
+.submit-btn {
+  width: 100%;
+  height: 46px;
+  background-color: #5392f4 !important; /* 还原图中的亮蓝色 */
+  border-color: #5392f4 !important;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* 底部跳转模块 */
 .links {
   display: flex;
   justify-content: center;
-  margin-top: 12px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  .text-muted {
+    color: #333333;
+    font-weight: 500;
+  }
+
   .link {
-    color: #409eff;
+    color: #3f367e; /* 还原图中略偏深紫蓝的文字色 */
+    font-weight: 600;
     cursor: pointer;
-    font-size: 14px;
+    text-decoration: none;
+
     &:hover {
       text-decoration: underline;
     }
