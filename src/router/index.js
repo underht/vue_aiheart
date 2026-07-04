@@ -59,9 +59,34 @@ const routes = [
     },{
         path: "",
         component: FrontendLayout,
-        meta: { title: "首页",
-            icon: "Home"
-         }
+        children:[
+            {path:"",
+                component: () => import("@/views/Home.vue"),
+                meta: { title: "首页",
+                    icon: "Home"
+                 }
+            },{
+                path:"/knowledge",
+                component: () => import("@/views/FrontendKnowledge.vue"),
+                meta: { title: "知识库",
+                    icon: "Book"
+                 }
+            },{
+                path:"/consultation",
+                component: () => import("@/views/FrontendConsultation.vue"),
+                meta: { title: "咨询",
+                    icon: "Chat"
+                 }
+            },{
+                path:"/emotiondiary",
+                component: () => import("@/views/EmotionDiary.vue"),
+                meta: { title: "情绪日志",
+                    icon: "File"
+                 }
+            }
+
+
+        ]
     }
 ];
 
