@@ -11,7 +11,7 @@
 
       <div class="nav-section">
         <div class="nav-links">
-          <router-link to="/" class="nav-item">首页</router-link>
+          <router-link to="/home" class="nav-item">首页</router-link>
           <router-link to="/knowledge" class="nav-item">知识库</router-link>
           <router-link to="/consultation" class="nav-item" v-if="islogin">AI咨询</router-link>
           <router-link to="/emotiondiary" class="nav-item" v-if="islogin">情绪日志</router-link>
@@ -28,8 +28,17 @@
 
 
     </div>
-    <router-view />    
-    
+    <div class="main-view">
+      <router-view />    
+    </div>
+
+    <footer class="footer-container">
+      <div class="footer-content">
+        <p class="copyright-text">
+          &copy; 2026 心理健康AI助手. 保留所有权利.
+        </p>
+      </div>
+    </footer>
   </div>
 
 </template>
@@ -64,7 +73,6 @@ onMounted(() => {
   padding: 0 32px;
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border-bottom: 1px solid #f0f2f5;
   user-select: none;
 }
 
@@ -198,5 +206,47 @@ onMounted(() => {
 
 .logout-btn:hover {
   transform: translateY(-1px);
+}
+
+/* 页脚主容器：采用与图片一致的深色高级调性（深蓝灰） */
+.footer-container {
+  background-color: #1e2530; /* 深色背景 */
+
+  padding: 10px 0;
+  width: 100%;
+  height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center; /* 居中对齐版权信息 */
+  align-items: center;
+}
+
+/* 内容布局调整 */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: center; /* 居中对齐版权信息 */
+  align-items: center;
+}
+
+/* 版权文字样式优化：提升文字细腻度 */
+.copyright-text {
+  font-size: 14px;
+  color: #94a3b8; /* 柔和的浅灰字色，降低刺眼度 */
+  letter-spacing: 0.5px;
+  margin: 0;
+  font-weight: 400;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+/* 鼠标悬浮时微亮交互 */
+.copyright-text:hover {
+  color: #cbd5e1;
+}
+.main-view{
+  height: calc(100vh - 84px);
 }
 </style>

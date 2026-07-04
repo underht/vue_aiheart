@@ -60,7 +60,8 @@ const routes = [
         path: "",
         component: FrontendLayout,
         children:[
-            {path:"",
+            {
+                path:"/home",
                 component: () => import("@/views/Home.vue"),
                 meta: { title: "首页",
                     icon: "Home"
