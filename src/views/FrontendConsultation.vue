@@ -53,26 +53,25 @@
                                 <el-table-column >
                                 <template #default="scope">
                                     <div class="history-content-container">
-                                    <p>{{ scope.row.sessionTitle }}</p>
+                                    <div style="display: flex; justify-content: space-between;"> 
+                                    <p style=" font-size: 16px;">{{ scope.row.sessionTitle }}</p>
+                                    <el-button type="danger" :icon="Delete" text />
+                                    </div>
+
                                     <p>{{ scope.row.startedAt }}</p>
+                                    <div style="display: flex; justify-content: space-between;">
                                     <p>
                                     {{ scope.row.lastMessageContent?.length > 20 
                                         ? scope.row.lastMessageContent.slice(0, 20) + '...' 
                                         : scope.row.lastMessageContent }}
-                                    </p>
-
-                                    <div class="history-action">
+                                    </p>        
                                         <div class="messagenum">
-                                            <el-icon><ChatDotRound /></el-icon>
+
                                             <p>
-                                                    {{scope.row.messageCount}}
+                                            <el-icon><ChatDotRound /></el-icon>
+                                            {{scope.row.messageCount}}
                                             </p>        
-                                        </div>
-                                        <div class="delete">
-
-                                            <el-icon><Delete /></el-icon>
-                                        </div>
-
+                                        </div>                                                                    
                                     </div>
                                       
                                     </div>
@@ -187,7 +186,10 @@ import { onMounted, ref } from 'vue'
 // 引入 Element Plus 官方的纸飞机/发送图标
 import { Position } from '@element-plus/icons-vue'
 import {sendfirstmessage,getsessionlist} from '@/api/admin.js'
+import {
+  Delete,
 
+} from '@element-plus/icons-vue'
 // 声明组件对外触发的自定义事件
 const emit = defineEmits(['send'])
 
@@ -437,7 +439,7 @@ onMounted(async () => {
       .messagenum{
         display: flex;
         flex-direction: row;
-
+        width: 200px;
       }
       .delete{
         margin-left: 10px;
