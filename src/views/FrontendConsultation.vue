@@ -38,12 +38,14 @@
                 </div>
                 </el-card>
 
-                <el-card class="card-item" shadow="hover">
-                <div class="card-content">
+                <el-card class="card-item history-card" shadow="hover" style="height: 40vh">
+                <div class="card-content ">
 
                     <div class="history">
+
+
                         <span class="history-label">会话历史</span>
-                        <el-scrollbar height="100px">
+                        <el-scrollbar height="30vh">
                             <div class="history-container">
                             <span v-if="!historylist && historylist.length === 0" class="history-empty">暂无会话记录</span>
                             <el-table :data="historylist" style="width: 100%">
@@ -58,6 +60,21 @@
                                         ? scope.row.lastMessageContent.slice(0, 20) + '...' 
                                         : scope.row.lastMessageContent }}
                                     </p>
+
+                                    <div class="history-action">
+                                        <div class="messagenum">
+                                            <el-icon><ChatDotRound /></el-icon>
+                                            <p>
+                                                    {{scope.row.messageCount}}
+                                            </p>        
+                                        </div>
+                                        <div class="delete">
+
+                                            <el-icon><Delete /></el-icon>
+                                        </div>
+
+                                    </div>
+                                      
                                     </div>
 
                                 </template>
@@ -66,18 +83,19 @@
                             </el-table>
                         </div>
                         </el-scrollbar>
-                        <div class="history-action">
+                        <!-- <div class="history-action">
                         <el-button @click="getsessionspage">
                             上一页
                         </el-button>                        
                         <el-button>
                             下一页
                         </el-button>
-                        </div>
+                        </div> -->
 
 
+                    
                     </div>
-                    </div>
+                </div>
                 </el-card>
             </div>
         </div>
@@ -268,7 +286,17 @@ onMounted(async () => {
         display: flex;
         align-items: center;
         flex-direction: row-reverse;
-
+.dashboard-container {
+  display: flex;
+  gap: 10px;
+  padding-right:10px;
+  background-color: #f5f7fa;
+  min-height: 200px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 80%;
+  height: 95%;
+}
     }
     .right-container {
         width: 60%;
@@ -277,9 +305,9 @@ onMounted(async () => {
         align-items: center;
         .chat-container {
           width: 80%;
-          height: 80%;
+          height: 95%;
           display: flex;
-          margin: 30px;
+            margin: 0;
           flex-direction: column;
           background-color: #ffffff;
           border-radius: 16px;
@@ -288,19 +316,10 @@ onMounted(async () => {
         }
     }
 }
-.dashboard-container {
-  display: flex;
-  gap: 10px;
-  padding: 20px;
-  background-color: #f5f7fa;
-  min-height: 200px;
-  flex-wrap: wrap;
-  flex-direction: column;
-  width: 80%;
-}
+
 
 .card-item {
-  flex: 1;
+  /* flex: 1; */
   min-width: 200px;
   width: 100%;
   border-radius: 12px;
@@ -313,7 +332,7 @@ onMounted(async () => {
 }
 
 .card-content {
-  padding: 10px 0;
+  padding: 0;
   width: 100%;
 }
 
@@ -398,11 +417,12 @@ onMounted(async () => {
   flex-direction: column;
   gap: 4px;
   margin: 0;
+  height: 100%  ;
   .history-content-container{
     display: flex;
     flex-direction: column;
     gap: 4px;
-  margin: 0;
+    margin: 0;
 
     p{
       font-size: 10px;
@@ -413,8 +433,15 @@ onMounted(async () => {
 .history-action{
       display: flex;
       flex-direction: row;
-      gap: 4px;
       margin: 0;
+      .messagenum{
+        display: flex;
+        flex-direction: row;
+
+      }
+      .delete{
+        margin-left: 10px;
+      }
 }
   }
 }
