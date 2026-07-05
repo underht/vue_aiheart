@@ -55,7 +55,9 @@
                                     <div class="history-content-container">
                                     <div style="display: flex; justify-content: space-between;"> 
                                     <p style=" font-size: 16px;">{{ scope.row.sessionTitle }}</p>
-                                    <el-button type="danger" :icon="Delete" text />
+                                    <el-button type="danger" :icon="Delete" text 
+                                    @click="deletesession(scope.row.id)"
+                                    />
                                     </div>
 
                                     <p>{{ scope.row.startedAt }}</p>
@@ -185,7 +187,8 @@ import { Plus, UserFilled, ChatDotRound, Service } from '@element-plus/icons-vue
 import { onMounted, ref } from 'vue'
 // 引入 Element Plus 官方的纸飞机/发送图标
 import { Position } from '@element-plus/icons-vue'
-import {sendfirstmessage,getsessionlist} from '@/api/admin.js'
+import {sendfirstmessage,getsessionlist,userdeletsession} from '@/api/admin.js'
+import { ElMessage } from 'element-plus'
 import {
   Delete,
 
@@ -230,14 +233,17 @@ const handleSend = async() => {
         console.log(res);
         currentSession.value.sessionid=res.data.sessionid
         currentSession.value.status=res.data.status
-        currentSession.value.initialMessage.value=res.data.initialMessage
+        currentSession.value.initialMessage=res.data.initialMessage
         currentSession.value.startTime=res.data.startTime
         currentSession.value.messageCount=res.data.messageCount
         currentSession.value.expiryTime=res.data.expiryTime
         currentSession.value.userHash=res.data.userHash
         console.log(currentSession.value);
-        
+        getsessionspage();
+
     }
+
+        
 
 
 
@@ -269,10 +275,24 @@ const creatnewsession=()=>{
 
 const aiissending=ref(false)
 const messages = ref([]);
+
+const deletesession=async(id)=>{
+    try {
+        const res=await userdeletsession(id);
+        console.log(res);
+        getsessionspage();
+        ElMessage('删除成功');
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
 onMounted(async () => {
     creatnewsession();
     getsessionspage();
 })
+
 </script>
 
 <style scoped>

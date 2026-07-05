@@ -103,3 +103,6 @@ export const sendfirstmessage = (data) => {
 export const getsessionlist=(data)=>{
     return service.get("/psychological-chat/sessions",data);
 }
+export const userdeletsession=(sessionId)=>{
+    return service.delete("/psychological-chat/sessions/"+sessionId);
+}
