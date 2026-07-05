@@ -40,17 +40,44 @@
 
                 <el-card class="card-item" shadow="hover">
                 <div class="card-content">
-                    <div class="info-section">
-                    <div class="suggestion">
-                        <span class="suggestion-label">给你的小建议</span>
-                        <span class="suggestion-text">情绪状态平稳</span>
-                    </div>
+
                     <div class="history">
                         <span class="history-label">会话历史</span>
-                        <span class="history-empty">暂无会话记录</span>
+                        <el-scrollbar height="100px">
+                            <div class="history-container">
+                            <span v-if="!historylist && historylist.length === 0" class="history-empty">暂无会话记录</span>
+                            <el-table :data="historylist" style="width: 100%">
+        
+                                <el-table-column >
+                                <template #default="scope">
+                                    <div class="history-content-container">
+                                    <p>{{ scope.row.sessionTitle }}</p>
+                                    <p>{{ scope.row.startedAt }}</p>
+                                    <p>
+                                    {{ scope.row.lastMessageContent?.length > 20 
+                                        ? scope.row.lastMessageContent.slice(0, 20) + '...' 
+                                        : scope.row.lastMessageContent }}
+                                    </p>
+                                    </div>
+
+                                </template>
+                                </el-table-column>
+
+                            </el-table>
+                        </div>
+                        </el-scrollbar>
+                        <div class="history-action">
+                        <el-button @click="getsessionspage">
+                            上一页
+                        </el-button>                        
+                        <el-button>
+                            下一页
+                        </el-button>
+                        </div>
+
+
                     </div>
                     </div>
-                </div>
                 </el-card>
             </div>
         </div>
@@ -69,7 +96,7 @@
                             <p class="title-sub">您的贴心 AI 心理健康助手</p>
                         </div>
                     </div>
-                    <el-button class="action-btn" circle>
+                    <el-button class="action-btn" circle @click="creatnewsession">
                         <el-icon><Plus /></el-icon>
                     </el-button>
                 </div>
@@ -138,9 +165,10 @@
 <script setup>
 import like from '@/assets/like.png'
 import { Plus, UserFilled, ChatDotRound, Service } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 // 引入 Element Plus 官方的纸飞机/发送图标
 import { Position } from '@element-plus/icons-vue'
+import {sendfirstmessage,getsessionlist} from '@/api/admin.js'
 
 // 声明组件对外触发的自定义事件
 const emit = defineEmits(['send'])
@@ -166,22 +194,65 @@ const handleKeyDown = (event) => {
  * 核心逻辑模块：执行发送操作
  * 目的：校验数据、触发向外传递事件并清空当前状态
  */
-const handleSend = () => {
+const handleSend = async() => {
   // 过滤掉纯空格，防止发空消息
   const trimmedText = inputText.value.trim()
-  if (!trimmedText) return
+    if (!trimmedText) return
+    if(currentSession.value.status=='temp'){//是新对话
+        currentSession.value.status='normal';
+        currentSession.value.sessionTitle='新对话'+Date.now();
 
-  // 将封装好的核心数据通过事件派发给父组件
-  emit('send', trimmedText)
+        const senddata={
+            "initialMessage": trimmedText,
+            "sessionTitle": currentSession.value.sessionTitle
+        }
+        const res=await sendfirstmessage(senddata);
+        console.log(res);
+        currentSession.value.sessionid=res.data.sessionid
+        currentSession.value.status=res.data.status
+        currentSession.value.initialMessage.value=res.data.initialMessage
+        currentSession.value.startTime=res.data.startTime
+        currentSession.value.messageCount=res.data.messageCount
+        currentSession.value.expiryTime=res.data.expiryTime
+        currentSession.value.userHash=res.data.userHash
+        console.log(currentSession.value);
+        
+    }
 
-  // 成功发送后，重置复用模块的输入状态
-  inputText.value = ''
+
+
+
+
 }
 
+const sessionspagenation=ref({
+    pageNum:1,
+    pageSize:10
+})
+const getsessionspage=async()=>{
+    const res=await getsessionlist(sessionspagenation.value)
+    console.log("列表",res);
+    historylist.value = res.data.records;
+}
+const historylist=ref([])
+const currentSession=ref('')
+
+const creatnewsession=()=>{
+    const newsession={
+        sessionid:`temp_${Date.now()}`,
+        status:'temp',
+        sessionTitle:'新对话',
+    }
+    currentSession.value=newsession
+}
 
 
 const aiissending=ref(false)
 const messages = ref([]);
+onMounted(async () => {
+    creatnewsession();
+    getsessionspage();
+})
 </script>
 
 <style scoped>
@@ -192,7 +263,7 @@ const messages = ref([]);
     height: 100%;
     background-color: #f5f7fa;   
     .left-container {
-        width: 30%;
+        width: 40%;
         height: 100%;
         display: flex;
         align-items: center;
@@ -219,17 +290,19 @@ const messages = ref([]);
 }
 .dashboard-container {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   padding: 20px;
   background-color: #f5f7fa;
   min-height: 200px;
   flex-wrap: wrap;
   flex-direction: column;
+  width: 80%;
 }
 
 .card-item {
   flex: 1;
   min-width: 200px;
+  width: 100%;
   border-radius: 12px;
   background: #ffffff;
   transition: all 0.3s ease;
@@ -241,6 +314,7 @@ const messages = ref([]);
 
 .card-content {
   padding: 10px 0;
+  width: 100%;
 }
 
 /* 第一个卡片样式 */
@@ -299,11 +373,7 @@ const messages = ref([]);
 }
 
 /* 第三个卡片样式 */
-.info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+
 
 .suggestion {
   display: flex;
@@ -327,6 +397,26 @@ const messages = ref([]);
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin: 0;
+  .history-content-container{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  margin: 0;
+
+    p{
+      font-size: 10px;
+      color: #303133;
+  margin: 0;
+
+    }
+.history-action{
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
+      margin: 0;
+}
+  }
 }
 
 .history-label {
@@ -514,6 +604,7 @@ const messages = ref([]);
 
 }
 .chat-input{
+    background-color: #ffffff;
     padding: 10px;
 }
 </style>

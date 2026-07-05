@@ -74,3 +74,32 @@ export const logoutApi = () => {
 export const register = (data) => {
     return service.post("/user/register", data);
 }
+/**
+ * 关键逻辑：开启心理AI对话并发送第一条初始化消息
+ * * @param {Object} data - 请求体参数
+ * @param {string} data.initialMessage - 第一条问候语或用户输入的初始文本（例如："今天天气很好..."）
+ * @param {string} data.sessionTitle - 会话的标题，通常由名称和当前时间戳拼接而成
+ * @returns {Promise} 返回一个 Promise 对象，包含后台响应的会话详情数据
+ * * @example
+ * // 调用示例：
+ * sendfirstmessage({
+ * initialMessage: "今天天气很好，心情还不错",
+ * sessionTitle: "宁渡AI助手 - 2026/6/16 09:58:33"
+ * })
+ */
+export const sendfirstmessage = (data) => {
+    // 核心算法：通过 POST 请求将初始消息和会话标题提交给后端，启动新的聊天会话
+    return service.post("/psychological-chat/session/start", data);
+}
+
+
+// pageNum
+// string 
+// 当前页
+// 必需
+// pageSize
+// string 
+// 分页数
+export const getsessionlist=(data)=>{
+    return service.get("/psychological-chat/sessions",data);
+}
