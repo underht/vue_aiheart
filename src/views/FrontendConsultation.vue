@@ -8,18 +8,9 @@
                     <div class="ai-status">
                             <div>
                             <el-avatar>
-                                <!-- <el-icon><ChatDotRound /></el-icon> -->
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" id="Cyborg-2--Streamline-Plump" height="48" width="48">
-                                <desc>
-                                    Cyborg 2 Streamline Icon: https://streamlinehq.com
-                                </desc>
-                                <g id="cyborg-2--artificial-robotics-intelligence-machine-technology-android">
-                                    <path id="Vector 857 (Stroke)" fill="#2859c5" fill-rule="evenodd" d="M24 8a2 2 0 0 1 2 2l0 8a2 2 0 1 1 -4 0l0 -8a2 2 0 0 1 2 -2Z" clip-rule="evenodd" stroke-width="1"></path>
-                                    <path id="Union" fill="#2859c5" d="M24 2a5 5 0 1 0 0 10 5 5 0 0 0 0 -10Z" stroke-width="1"></path>
-                                    <path id="Union_2" fill="#8fbffa" d="M24 46.5c5.919 0 10.187 -0.161 13.007 -0.327 3.248 -0.19 5.878 -2.608 6.154 -5.92 0.182 -2.187 0.339 -5.237 0.339 -9.253s-0.157 -7.066 -0.34 -9.253c-0.275 -3.312 -2.905 -5.73 -6.153 -5.92 -2.82 -0.166 -7.088 -0.327 -13.007 -0.327s-10.187 0.161 -13.007 0.327c-3.248 0.19 -5.878 2.608 -6.154 5.92C4.657 23.934 4.5 26.983 4.5 31s0.157 7.066 0.34 9.254c0.275 3.311 2.905 5.729 6.153 5.92 2.82 0.165 7.088 0.326 13.007 0.326Z" stroke-width="1"></path>
-                                    <path id="Subtract" fill="#2859c5" fill-rule="evenodd" d="M19 26a2 2 0 1 0 -4 0v1a2 2 0 1 0 4 0v-1Zm12 -2a2 2 0 0 0 -2 2v1a2 2 0 1 0 4 0v-1a2 2 0 0 0 -2 -2ZM16.628 34.545c0.966 -0.91 2.065 -0.507 2.959 0.189 0.15 0.117 0.407 0.296 0.775 0.482 0.727 0.369 1.918 0.784 3.638 0.784s2.911 -0.415 3.638 -0.784a4.76 4.76 0 0 0 0.775 -0.482c0.894 -0.696 1.993 -1.1 2.959 -0.19 0.831 0.785 0.805 2.116 0.012 2.9l-0.12 0.116c-0.098 0.089 -0.23 0.202 -0.395 0.331a8.816 8.816 0 0 1 -1.421 0.893C28.203 39.415 26.395 40 24 40c-2.395 0 -4.203 -0.585 -5.448 -1.216a8.816 8.816 0 0 1 -1.421 -0.893 6.368 6.368 0 0 1 -0.394 -0.331c-0.852 -0.782 -1.019 -2.157 -0.109 -3.015Z" clip-rule="evenodd" stroke-width="1"></path>
-                                </g>
-                                </svg>                            </el-avatar>
+                                <i-local-robot></i-local-robot>                        
+
+                            </el-avatar>
                             </div>
                         <span class="ai-title">宁波AI助手</span>
                         <el-tag type="success" size="small" effect="plain">在线服务中</el-tag>
@@ -69,14 +60,9 @@
                 <div class="chat-header">
                     <div class="chat-title">
                         <div class="img-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Heart--Streamline-Flex" height="24" width="24">
-                            <desc>
-                                Heart Streamline Icon: https://streamlinehq.com
-                            </desc>
-                            <g id="heart--reward-social-rating-media-heart-it-like-favorite-love">
-                                <path id="Union" fill="#c13153" fill-rule="evenodd" d="M13.75 4.941c-0.023 -1.582 -0.92 -3.14 -2.297 -3.782a3.199 3.199 0 0 0 -2.36 -0.139c-0.705 0.224 -1.412 0.683 -2.093 1.405 -0.681 -0.722 -1.388 -1.18 -2.093 -1.405a3.199 3.199 0 0 0 -2.36 0.139C1.17 1.801 0.273 3.359 0.25 4.941v0.008c0 2.307 1.372 4.351 2.826 5.786a12.326 12.326 0 0 0 2.183 1.726c0.338 0.205 0.657 0.37 0.94 0.486 0.271 0.11 0.553 0.194 0.801 0.194s0.53 -0.084 0.8 -0.194c0.284 -0.115 0.603 -0.28 0.94 -0.486a12.328 12.328 0 0 0 2.184 -1.726C12.378 9.3 13.75 7.256 13.75 4.95l0 -0.008Z" clip-rule="evenodd" stroke-width="1"></path>
-                            </g>
-                            </svg>
+                            <i-local-heart class="my-heart" />
+
+                            <i-mdi-alarm />
                         </div>
                         <div class="chat-info">
                             <h3 class="title-main">宁波AI助手</h3>
@@ -93,18 +79,7 @@
                         <div v-if="messages.length === 0" class="message ai-message">
                             <el-avatar class="chat-avatar" :size="36">
                                 <!-- <el-icon><Service /></el-icon> -->
-                                
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" id="Cyborg-2--Streamline-Plump" height="48" width="48">
-                                <desc>
-                                    Cyborg 2 Streamline Icon: https://streamlinehq.com
-                                </desc>
-                                <g id="cyborg-2--artificial-robotics-intelligence-machine-technology-android">
-                                    <path id="Vector 857 (Stroke)" fill="#2859c5" fill-rule="evenodd" d="M24 8a2 2 0 0 1 2 2l0 8a2 2 0 1 1 -4 0l0 -8a2 2 0 0 1 2 -2Z" clip-rule="evenodd" stroke-width="1"></path>
-                                    <path id="Union" fill="#2859c5" d="M24 2a5 5 0 1 0 0 10 5 5 0 0 0 0 -10Z" stroke-width="1"></path>
-                                    <path id="Union_2" fill="#8fbffa" d="M24 46.5c5.919 0 10.187 -0.161 13.007 -0.327 3.248 -0.19 5.878 -2.608 6.154 -5.92 0.182 -2.187 0.339 -5.237 0.339 -9.253s-0.157 -7.066 -0.34 -9.253c-0.275 -3.312 -2.905 -5.73 -6.153 -5.92 -2.82 -0.166 -7.088 -0.327 -13.007 -0.327s-10.187 0.161 -13.007 0.327c-3.248 0.19 -5.878 2.608 -6.154 5.92C4.657 23.934 4.5 26.983 4.5 31s0.157 7.066 0.34 9.254c0.275 3.311 2.905 5.729 6.153 5.92 2.82 0.165 7.088 0.326 13.007 0.326Z" stroke-width="1"></path>
-                                    <path id="Subtract" fill="#2859c5" fill-rule="evenodd" d="M19 26a2 2 0 1 0 -4 0v1a2 2 0 1 0 4 0v-1Zm12 -2a2 2 0 0 0 -2 2v1a2 2 0 1 0 4 0v-1a2 2 0 0 0 -2 -2ZM16.628 34.545c0.966 -0.91 2.065 -0.507 2.959 0.189 0.15 0.117 0.407 0.296 0.775 0.482 0.727 0.369 1.918 0.784 3.638 0.784s2.911 -0.415 3.638 -0.784a4.76 4.76 0 0 0 0.775 -0.482c0.894 -0.696 1.993 -1.1 2.959 -0.19 0.831 0.785 0.805 2.116 0.012 2.9l-0.12 0.116c-0.098 0.089 -0.23 0.202 -0.395 0.331a8.816 8.816 0 0 1 -1.421 0.893C28.203 39.415 26.395 40 24 40c-2.395 0 -4.203 -0.585 -5.448 -1.216a8.816 8.816 0 0 1 -1.421 -0.893 6.368 6.368 0 0 1 -0.394 -0.331c-0.852 -0.782 -1.019 -2.157 -0.109 -3.015Z" clip-rule="evenodd" stroke-width="1"></path>
-                                </g>
-                                </svg>                                
+                                <i-local-robot></i-local-robot>                        
                             </el-avatar>
                             
                             <div class="message-block">
@@ -452,5 +427,9 @@ const messages = ref([]);
             color: #ffffff; /* 白字提升易读性 */
         }
     }
+}
+.my-heart{
+    width: 40px;
+
 }
 </style>
