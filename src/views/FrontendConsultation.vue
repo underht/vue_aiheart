@@ -87,12 +87,46 @@
                                 <div class="message-content">
                                     <p>您好，我是宁波AI助手，有什么可以帮助您的吗？您的心理健康由我来倾听守护。</p>
                                 </div>
+                                <div class="message-time">
+                                <p>刚刚</p>
+                                </div>
                             </div>
+
                         </div>
 
-                        <div class="message" v-for="message in messages" :key="message.id">
-                             </div>
                     </div>
+                </div>
+                <div class="chat-input">
+                        <el-row :gutter="12" align="bottom" style="width: 100%; max-width: 800px; margin: 0 auto;">
+                            
+                            <el-col :span="21">
+                            <el-input
+                                v-model="inputText"
+                                type="textarea"
+                                :rows="3"
+                                maxlength="500"
+                                resize="none"
+                                @keydown="handleKeyDown"
+                                :disable="aiissending"
+                            />
+                            
+                            <el-row justify="space-between" style="margin-top: 6px; color: #a8abb2; font-size: 12px;">
+                                <span>按Enter发送，Shift+Enter换行</span>
+                                <span>{{ inputText.length }}/500</span>
+                            </el-row>
+                            </el-col>
+
+                            <el-col :span="3" style="display: flex; justify-content: flex-end;">
+                            <el-button
+                                color="#f3a73f"
+                                :icon="Position"
+                                style="width: 54px; height: 54px; border-radius: 16px; font-size: 20px;"
+                                @click="handleSend"
+                            />
+                            </el-col>
+
+                        </el-row>
+
                 </div>
             </div>
 
@@ -105,7 +139,48 @@
 import like from '@/assets/like.png'
 import { Plus, UserFilled, ChatDotRound, Service } from '@element-plus/icons-vue'
 import { ref } from 'vue'
+// 引入 Element Plus 官方的纸飞机/发送图标
+import { Position } from '@element-plus/icons-vue'
 
+// 声明组件对外触发的自定义事件
+const emit = defineEmits(['send'])
+
+// 输入框绑定的响应式变量
+const inputText = ref('')
+
+/**
+ * 核心逻辑模块：键盘事件监听算法
+ * 目的：拦截标准的 Enter 换行，改成交给发送逻辑处理；同时保留 Shift+Enter 的原生换行能力
+ */
+const handleKeyDown = (event) => {
+  // 识别到按下 Enter 键，且此时并没有按下 Shift 键
+  if (event.key === 'Enter' && !event.shiftKey) {
+    // 必须阻止默认的换行行为，否则输入框会多出一个回车
+    event.preventDefault()
+    // 调用核心发送模块
+    handleSend()
+  }
+}
+
+/**
+ * 核心逻辑模块：执行发送操作
+ * 目的：校验数据、触发向外传递事件并清空当前状态
+ */
+const handleSend = () => {
+  // 过滤掉纯空格，防止发空消息
+  const trimmedText = inputText.value.trim()
+  if (!trimmedText) return
+
+  // 将封装好的核心数据通过事件派发给父组件
+  emit('send', trimmedText)
+
+  // 成功发送后，重置复用模块的输入状态
+  inputText.value = ''
+}
+
+
+
+const aiissending=ref(false)
 const messages = ref([]);
 </script>
 
@@ -115,13 +190,14 @@ const messages = ref([]);
     flex-direction: row;
     width: 100%;
     height: 100%;
+    background-color: #f5f7fa;   
     .left-container {
         width: 30%;
         height: 100%;
         display: flex;
         align-items: center;
         flex-direction: row-reverse;
-        background-color: #f5f7fa;
+
     }
     .right-container {
         width: 60%;
@@ -274,9 +350,9 @@ const messages = ref([]);
     padding: 16px 24px;
     width: 100%;
     box-sizing: border-box;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f0f2f5; 
-
+    border-bottom: 1px solid #898989; 
+    background-color: #c77b29;
+    
     .chat-title {
         display: flex;
         flex-direction: row;
@@ -307,14 +383,14 @@ const messages = ref([]);
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #1f2f3d;
+        color: #ffffff;
         line-height: 1.4;
     }
 
     .title-sub {
         margin: 0;
         font-size: 13px;
-        color: #909399;
+        color: #ffffff;
         line-height: 1.4;
     }
 }
@@ -374,6 +450,11 @@ const messages = ref([]);
     flex-direction: column;
     gap: 4px; /* 名字和气泡中间细微留白 */
     max-width: 70%; /* 限制气泡最大宽度，防止单行文字撑满屏幕过长 */
+    .message-time{
+        font-size: 12px;
+        color: #909399;
+        text-align: left;
+    }
 }
 
 /* 用户名字样式：轻量、优雅的排版 */
@@ -431,5 +512,8 @@ const messages = ref([]);
 .my-heart{
     width: 40px;
 
+}
+.chat-input{
+    padding: 10px;
 }
 </style>
