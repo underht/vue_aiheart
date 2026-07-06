@@ -106,3 +106,6 @@ export const getsessionlist=(data)=>{
 export const userdeletsession=(sessionId)=>{
     return service.delete("/psychological-chat/sessions/"+sessionId);
 }
+export const usergetsession=(sessionId)=>{
+    return service.get("/psychological-chat/sessions/"+sessionId+"/messages");
+}

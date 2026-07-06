@@ -70,7 +70,9 @@
                                         <div class="messagenum">
 
                                             <p>
-                                            <el-icon><ChatDotRound /></el-icon>
+                                            <el-button  :icon="ChatDotRound" text 
+                                            @click="getsessions(scope.row.id)"
+                                            />
                                             {{scope.row.messageCount}}
                                             </p>        
                                         </div>                                                                    
@@ -107,8 +109,6 @@
                     <div class="chat-title">
                         <div class="img-wrapper">
                             <i-local-heart class="my-heart" />
-
-                            <i-mdi-alarm />
                         </div>
                         <div class="chat-info">
                             <h3 class="title-main">宁波AI助手</h3>
@@ -122,7 +122,7 @@
                 
                 <div class="chat-body">
                     <div class="chat-messages">
-                        <div v-if="messages.length === 0" class="message ai-message">
+                        <div v-if="sessions.length === 0" class="message ai-message">
                             <el-avatar class="chat-avatar" :size="36">
                                 <!-- <el-icon><Service /></el-icon> -->
                                 <i-local-robot></i-local-robot>                        
@@ -139,6 +139,42 @@
                             </div>
 
                         </div>
+                        <div v-if="sessions.length !== 0" class="message ai-message">
+                            <el-col>
+                                <el-row v-for="item in sessions"> 
+                                    <el-avatar class="chat-avatar" :size="36">
+                                            <!-- <el-icon><Service /></el-icon> -->
+                                            <div v-if="item.senderType === 1">
+                                            <i-local-people></i-local-people>
+                                            </div>
+                                            <div v-if="item.senderType === 2">
+                                            <i-local-robot></i-local-robot>                                     
+                                            </div>
+                                        </el-avatar>
+                                        
+                                        <div class="message-block">
+                                            <div class="name">
+                                                <p v-if="item.senderType === 2">宁波AI助手</p>
+                                                <p v-if="item.senderType === 1">用户</p>
+                                            </div>
+                                            <div class="message-content">
+                                                <p>{{ item.content }}</p>
+                                            </div>
+                                            <div class="message-time">
+                                            <p>{{ item.createdAt }}</p>
+                                            </div>
+                                        </div>                
+                                </el-row>
+                                           
+                            </el-col>
+
+
+                        </div>
+
+
+
+
+
 
                     </div>
                 </div>
@@ -187,7 +223,7 @@ import { Plus, UserFilled, ChatDotRound, Service } from '@element-plus/icons-vue
 import { onMounted, ref } from 'vue'
 // 引入 Element Plus 官方的纸飞机/发送图标
 import { Position } from '@element-plus/icons-vue'
-import {sendfirstmessage,getsessionlist,userdeletsession} from '@/api/admin.js'
+import {sendfirstmessage,getsessionlist,userdeletsession,usergetsession} from '@/api/admin.js'
 import { ElMessage } from 'element-plus'
 import {
   Delete,
@@ -231,14 +267,17 @@ const handleSend = async() => {
         }
         const res=await sendfirstmessage(senddata);
         console.log(res);
-        currentSession.value.sessionid=res.data.sessionid
+        currentSession.value.sessionId=res.data.sessionId
         currentSession.value.status=res.data.status
         currentSession.value.initialMessage=res.data.initialMessage
         currentSession.value.startTime=res.data.startTime
         currentSession.value.messageCount=res.data.messageCount
         currentSession.value.expiryTime=res.data.expiryTime
         currentSession.value.userHash=res.data.userHash
-        console.log(currentSession.value);
+        console.log('当前会话信息',currentSession.value);
+        const cleanId = res.data.sessionId.split('_')[1];
+        getsessions(cleanId);
+
         getsessionspage();
 
     }
@@ -260,12 +299,26 @@ const getsessionspage=async()=>{
     console.log("列表",res);
     historylist.value = res.data.records;
 }
+const sessions=ref([])
+const getsessions = async (sessionid) => {
+    try {
+        const res = await usergetsession(sessionid);
+        console.log("sessionid",sessionid);
+        
+        console.log('获得会话',res);
+        sessions.value=res.data;
+        console.log(sessions.length + '个消息');
+        
+    } catch (error) {
+        console.log(error); 
+    }
+}
 const historylist=ref([])
 const currentSession=ref('')
 
 const creatnewsession=()=>{
     const newsession={
-        sessionid:`temp_${Date.now()}`,
+        sessionId:`temp_${Date.now()}`,
         status:'temp',
         sessionTitle:'新对话',
     }
