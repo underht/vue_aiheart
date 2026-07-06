@@ -47,7 +47,7 @@
                         <span class="history-label">会话历史</span>
                         <el-scrollbar height="30vh">
                             <div class="history-container">
-                            <span v-if="!historylist && historylist.length === 0" class="history-empty">暂无会话记录</span>
+                            <span v-if="!historylist || historylist?.length === 0" class="history-empty">暂无会话记录</span>
                             <el-table :data="historylist" style="width: 100%">
         
                                 <el-table-column >
@@ -71,7 +71,7 @@
 
                                             <p>
                                             <el-button  :icon="ChatDotRound" text 
-                                            @click="getsessions(scope.row.id)"
+                                            @click="getsessions(scope.row)"
                                             />
                                             {{scope.row.messageCount}}
                                             </p>        
@@ -122,7 +122,7 @@
                 
                 <div class="chat-body">
                     <div class="chat-messages">
-                        <div v-if="sessions.length === 0" class="message ai-message">
+                        <div v-if="sessions?.length === 0" class="message ai-message">
                             <el-avatar class="chat-avatar" :size="36">
                                 <!-- <el-icon><Service /></el-icon> -->
                                 <i-local-robot></i-local-robot>                        
@@ -139,7 +139,7 @@
                             </div>
 
                         </div>
-                        <div v-if="sessions.length !== 0" class="message ai-message">
+                        <div v-if="sessions?.length !== 0" class="message ai-message">
                             <el-col>
                                 <el-row v-for="item in sessions"> 
                                     <el-avatar class="chat-avatar" :size="36">
@@ -269,10 +269,10 @@ const handleSend = async() => {
         console.log(res);
         currentSession.value.sessionId=res.data.sessionId
         currentSession.value.status=res.data.status
-        currentSession.value.initialMessage=res.data.initialMessage
+        // currentSession.value.initialMessage=res.data.initialMessage
         currentSession.value.startTime=res.data.startTime
         currentSession.value.messageCount=res.data.messageCount
-        currentSession.value.expiryTime=res.data.expiryTime
+        // currentSession.value.expiryTime=res.data.expiryTime
         currentSession.value.userHash=res.data.userHash
         console.log('当前会话信息',currentSession.value);
         const cleanId = res.data.sessionId.split('_')[1];
@@ -300,15 +300,19 @@ const getsessionspage=async()=>{
     historylist.value = res.data.records;
 }
 const sessions=ref([])
-const getsessions = async (sessionid) => {
+const getsessions = async (row) => {
     try {
-        const res = await usergetsession(sessionid);
-        console.log("sessionid",sessionid);
+        const res = await usergetsession(row.id);
+        console.log("sessionid是",row.id);
         
         console.log('获得会话',res);
         sessions.value=res.data;
-        console.log(sessions.length + '个消息');
-        
+        console.log("row信息",row);
+        currentSession.value.sessionId=row.sessionid
+        currentSession.value.status="active"
+        currentSession.value.startTime=row.startedAt
+        currentSession.value.messageCount=row.messageCount
+        currentSession.value.userHash=row.userId
     } catch (error) {
         console.log(error); 
     }
