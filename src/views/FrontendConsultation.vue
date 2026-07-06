@@ -71,7 +71,7 @@
 
                                             <p>
                                             <el-button  :icon="ChatDotRound" text 
-                                            @click="getsessions(scope.row)"
+                                            @click="getsessions(scope.row.id)"
                                             />
                                             {{scope.row.messageCount}}
                                             </p>        
@@ -115,7 +115,7 @@
                             <p class="title-sub">您的贴心 AI 心理健康助手</p>
                         </div>
                     </div>
-                    <el-button class="action-btn" circle @click="creatnewsession">
+                    <el-button class="action-btn" circle @click="creatnewsession()">
                         <el-icon><Plus /></el-icon>
                     </el-button>
                 </div>
@@ -229,6 +229,8 @@ import {
   Delete,
 
 } from '@element-plus/icons-vue'
+
+import { fetchEventSource } from '@microsoft/fetch-event-source'
 // 声明组件对外触发的自定义事件
 const emit = defineEmits(['send'])
 
@@ -270,17 +272,27 @@ const handleSend = async() => {
         currentSession.value.sessionId=res.data.sessionId
         currentSession.value.status=res.data.status
         // currentSession.value.initialMessage=res.data.initialMessage
-        currentSession.value.startTime=res.data.startTime
+        // currentSession.value.startTime=res.data.startTime
         currentSession.value.messageCount=res.data.messageCount
         // currentSession.value.expiryTime=res.data.expiryTime
-        currentSession.value.userHash=res.data.userHash
+        // currentSession.value.userHash=res.data.userHash
         console.log('当前会话信息',currentSession.value);
         const cleanId = res.data.sessionId.split('_')[1];
-        getsessions(cleanId);
-
         getsessionspage();
+        await getsessions(cleanId);
 
     }
+    const sessionid=currentSession.value.sessionId.split('_')[1];
+    const message=inputText.value 
+    console.log("当前会话信息",currentSession.value);
+    console.log("当前对话列表",sessions);
+    console.log("发送的sessionid",sessionid);
+    console.log("发送的msg",message);
+    sessions.value.push({id:`user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,senderType:1,content:message,creatAt:Date.now(),})
+    startaisession(sessionid,message);
+
+    
+
 
         
 
@@ -300,19 +312,19 @@ const getsessionspage=async()=>{
     historylist.value = res.data.records;
 }
 const sessions=ref([])
-const getsessions = async (row) => {
+const getsessions = async (id) => {
     try {
-        const res = await usergetsession(row.id);
-        console.log("sessionid是",row.id);
+        const res = await usergetsession(id);
+        console.log("sessionid是",id);
         
         console.log('获得会话',res);
         sessions.value=res.data;
         console.log("row信息",row);
-        currentSession.value.sessionId=row.sessionid
+        currentSession.value.sessionId=id
         currentSession.value.status="active"
-        currentSession.value.startTime=row.startedAt
-        currentSession.value.messageCount=row.messageCount
-        currentSession.value.userHash=row.userId
+        // currentSession.value.startTime=row.startedAt
+        currentSession.value.messageCount=res.data.length
+        // currentSession.value.userHash=row.userId
     } catch (error) {
         console.log(error); 
     }
@@ -327,9 +339,95 @@ const creatnewsession=()=>{
         sessionTitle:'新对话',
     }
     currentSession.value=newsession
+    sessions.value=[]
+}
+const startaisession=(sessionId,inputText)=>{
+    if(aiissending.value){
+
+        return ;        
+    }
+    aiissending.value=true;
+    const aiMessage={
+        id:`ai_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        senderType:2,
+        content:'',
+        creatAt:Date.now(),
+    }
+    sessions.value.push(aiMessage)//聊天的最后一条
+    const ctrl=new AbortController();
+    fetchEventSource('/api/psychological-chat/stream', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': localStorage.getItem('token'),
+            'Accept': 'text/event-stream',//干啥用的
+        },
+        body: JSON.stringify({
+            "sessionId": sessionId,
+            "userMessage": inputText
+        }),
+        signal:ctrl.signal,
+        onopen: (reponse) => {
+            // console.log(reponse)
+            if(reponse.headers.get("Content-Type")!=='text/event-stream'){
+                ElMessage.error('服务器返回非流式数据');
+            }
+        },
+        onmessage: (event) => {
+            console.log("event",event);
+            
+            const raw=event.data;
+            if(!raw){
+                return;
+            }
+            const eventname=event.event;
+            const aiMessage=sessions.value[sessions.value.length-1];
+            if(eventname=='done'){
+                aiissending.value=false;
+                ctrl.abort();
+                return
+            }
+            console.log("raw信息",raw);
+            
+            const payload=JSON.parse(raw);
+            const ok=String(payload.code)==='200';
+            if(ok&&payload.data&&payload.data.content){
+                aiMessage.content+=payload.data.content
+            }else if (!ok){
+                console.log("返回信息",payload);
+                
+                handleError(payload.msg);
+            }
+        },
+        onerror: (error) => {
+            console.log(error);
+            aiissending.value=false;
+            ctrl.abort();
+            ElMessage.error('AI出错了');
+        },
+        onclose: (event) => {
+            console.log(event);
+            aiissending.value=false;
+            ctrl.abort();
+            //分析情绪
+        },
+
+        
+    })
+
+
 }
 
+const handleError = (error) => {
+    const aiMessage=sessions.value[sessions.value.length-1];
 
+    if(aiMessage){
+        aiMessage.content+=`\nAI出错了:${error}`
+    }
+    aiissending.value=false;
+    ElMessage.error("ai出错了");
+    
+}
 const aiissending=ref(false)
 const messages = ref([]);
 
@@ -348,6 +446,8 @@ const deletesession=async(id)=>{
 onMounted(async () => {
     creatnewsession();
     getsessionspage();
+    console.log("会话",sessions);
+    
 })
 
 </script>
