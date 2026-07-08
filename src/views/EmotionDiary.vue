@@ -1,6 +1,7 @@
 <template>
     <div class="main">
-        <el-scrollbar style="width: 100%;">
+        <el-scrollbar style="width: 100%; display: flex;   justify-content: center;
+  align-items: center;">
 
         <div class="cardscontainer">
 
@@ -36,11 +37,14 @@
                 :key="index" 
                 :span="6"
               >
-              <el-button class="emotion-btn" @click="selectedEmotion = index">
+              <el-button class="emotion-btn" 
+              @click="selectedEmotion = index"
+              :class="{ 'is-active': selectedEmotion === index }"
+              >
               <template #default>
               <div 
                 class="emotion-item" 
-                :class="{ active: selectedEmotion === index }"
+                
               >
                 <!-- 图标占位：颜色动态绑定，内部留出 slot 供你填入实际图标 -->
                 <div class="icon-placeholder" :style="{ borderColor: item.color }">
@@ -66,7 +70,7 @@
                 </p>
                 <el-input
                 type="textarea"
-                rows="4" v-model="emodata.emotionTriggers">
+                rows=4 v-model="emodata.emotionTriggers">
                 </el-input>
             </div>
             <div class="quastion">
@@ -75,15 +79,15 @@
                 </p>
                 <el-input
                 type="textarea"
-                rows="4" v-model="emodata.diaryContent">
+                rows=4 v-model="emodata.diaryContent">
                 </el-input>
             </div>
-            <div style="">
+            <div style="display: flex;flex-direction: row;gap:10px">
             <div class="quastion">
                 <p>
               睡眠质量
                 </p>
-              <el-select v-model="sleepQuality" placeholder="label" style="width: 240px">
+              <el-select v-model="emodata.sleepQuality" placeholder="label" style="width: 240px">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -96,7 +100,7 @@
                 <p>
               压力等级
                 </p>
-                <el-select v-model="stressLevel" placeholder="label" style="width: 240px">
+                <el-select v-model="emodata.stressLevel" placeholder="label" style="width: 240px">
                     <el-option
                       v-for="item in stressoptions"
                       :key="item.value"
@@ -106,6 +110,9 @@
                   </el-select>
             </div>
             </div>
+           </el-card>
+           <el-card>
+            <el-button @click="postdiary">提交</el-button>
            </el-card>
         </div>
       </el-scrollbar>
@@ -117,7 +124,7 @@
 </template>
 
 <script setup>
-import { ref, computed,reactive } from 'vue'
+import { ref, computed,reactive, onMounted } from 'vue'
 import sad from "@/assets/悲伤.png"
 import anxious from "@/assets/焦虑.png"
 import surprised from "@/assets/惊讶.png"
@@ -127,6 +134,7 @@ import tired from "@/assets/疲惫.png"
 import calm from "@/assets/平静.png"
 import excited from "@/assets/兴奋.png"
 import {postEmotionDiary}from '@/api/admin.js'
+import { ElCard } from 'element-plus'
 
 
 const emodata=reactive({
@@ -142,6 +150,10 @@ const emodata=reactive({
 const postdiary=async()=>{
   emodata.diaryDate=new Date().toLocaleDateString()
   emodata.moodScore=score.value;
+  emodata.dominantEmotion=emotions.value[selectedEmotion.value].label;
+  console.log(emodata);
+  
+  
 
 }
 
@@ -232,6 +244,14 @@ const images = {
   surprised,
   confused
 }
+
+// onMounted(
+//   console.log("I̡̕͜͝͝ ̶́l͟͜ơ̴̧͝v̀̕͝͞é̸̛͡͝ ̀͟y͢͝͠҉o͜͞u̶̷̶͠")
+  
+// )
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -241,6 +261,11 @@ const images = {
   height: auto !important; 
   padding: 16px 0 !important; /* 上下留出间距，左右靠内容撑 */
   margin: 5px;
+}
+.emotion-btn.is-active {
+  background-color: #ECF5FF !important; /* 选中的浅蓝色背景，可根据原型图微调 */
+  border-color: #409EFF !important;     /* 选中的蓝色边框 */
+
 }
 .main{
   height: 100%;
@@ -259,7 +284,8 @@ const images = {
 
 
 .emotion-card {
-  max-width: 800px;
+
+  width: 100%;
   border-radius: 8px;
   border: 1px solid #EBEEF5;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.01);
