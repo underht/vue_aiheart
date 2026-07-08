@@ -22,7 +22,7 @@
                 <div class="card-content">
                     <div class="emotion-section">
                     <span class="emotion-title">情绪花园</span>
-                    
+                    <el-button @click="getanalysis">获取分析</el-button>
                     <div class="emotion-display">
                         <p>中性</p>
                         <p>50</p>
@@ -323,13 +323,13 @@ const getsessions = async (id) => {
         
         console.log('获得会话',res);
         sessions.value=res.data;
-        console.log("row信息",row);
         // 保存完整的sessionId格式以供后续使用
         currentSession.value.sessionId=`session_${id}`
         currentSession.value.status="active"
         // currentSession.value.startTime=row.startedAt
         currentSession.value.messageCount=res.data.length
         // currentSession.value.userHash=row.userId
+        console.log("当前会话信息",currentSession.value);
     } catch (error) {
         console.log(error); 
     }
@@ -431,7 +431,7 @@ const startaisession=(sessionId,inputText)=>{
             // console.log(event);
             aiissending.value=false;
             ctrl.abort();
-            getanalysis(finalSessionId);
+            // getanalysis(finalSessionId);
 
             //分析情绪
         },
@@ -467,10 +467,12 @@ const deletesession=async(id)=>{
     }
 }
 const ananlysis=ref({})
-const getanalysis=async(finalSessionId)=>{
-    
-const res=await getEmotionAnalysis(finalSessionId);
+const getanalysis=async()=>{
+    const sessionId=currentSession.value.sessionId;
+console.log("当前sessionid：",sessionId);
+const res=await getEmotionAnalysis(sessionId);
 ananlysis.value=res
+console.log(res)
 
 }
 
@@ -480,7 +482,7 @@ onMounted(async () => {
     if(!!currentSession.value){
         if(!currentSession.value.sessionId.startsWith('temp')){
             console.log("当前sessionid：",currentSession?.value.sessionId);
-            await getanalysis(currentSession?.value.sessionId);
+            // await getanalysis(currentSession?.value.sessionId);
         }
 
     }
