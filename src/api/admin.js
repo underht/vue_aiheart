@@ -836,3 +836,38 @@ export const userdeletsession = (sessionId) => {
 export const usergetsession = (sessionId) => {
     return service.get("/psychological-chat/sessions/" + sessionId + "/messages");
 };
+
+
+// diaryDate
+// string 
+// 记录日期
+// 必需
+// moodScore
+// integer 
+// 必需
+// 情绪评分（1-10）
+// dominantEmotion
+// string 
+// 重要情绪
+// 必需
+// emotionTriggers
+// string 
+// 情绪触发因素
+// 必需
+// diaryContent
+// string 
+// 今日感想
+// 必需
+// sleepQuality
+// integer 
+// 睡眠质量
+// 必需
+// stressLevel
+// integer 
+// 压力水平
+
+
+export const postEmotionDiary = (data) => {
+    return service.post("/emotion-diary", data);
+    
+}

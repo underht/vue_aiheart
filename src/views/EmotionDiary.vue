@@ -34,23 +34,32 @@
                 :key="index" 
                 :span="6"
               >
-              <el-card style="margin: 5px;">
-                <div 
-                  class="emotion-item" 
-                  :class="{ active: selectedEmotion === index }"
-                  @click="selectedEmotion = index"
-                >
-                  <!-- 图标占位：颜色动态绑定，内部留出 slot 供你填入实际图标 -->
-                  <div class="icon-placeholder" :style="{ borderColor: item.color }">
-                    <el-image :src="images[item.key]"  with="100%"  hight="100%"/>
-                  </div>
-                  <span class="label">{{ item.label }}</span>
+              <el-button class="emotion-btn" @click="selectedEmotion = index">
+              <template #default>
+              <div 
+                class="emotion-item" 
+                :class="{ active: selectedEmotion === index }"
+              >
+                <!-- 图标占位：颜色动态绑定，内部留出 slot 供你填入实际图标 -->
+                <div class="icon-placeholder" :style="{ borderColor: item.color }">
+                  <el-image :src="images[item.key]"  with="100%"  hight="100%"/>
                 </div>
-              </el-card>
+                <span class="label">{{ item.label }}</span>
+              </div>
+
+
+              </template>
+               
+              </el-button>
+              
 
               </el-col>
             </el-row>
           </el-card>
+           <el-card class="emotion-card" :body-style="{ padding: '24px' }">
+            <div class="card-header"><h2>详细记录</h2></div>
+            
+           </el-card>
         </div>
     </div>
     
@@ -60,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed,reactive } from 'vue'
 import sad from "@/assets/悲伤.png"
 import anxious from "@/assets/焦虑.png"
 import surprised from "@/assets/惊讶.png"
@@ -69,7 +78,24 @@ import confused from "@/assets/困惑.png"
 import tired from "@/assets/疲惫.png"
 import calm from "@/assets/平静.png"
 import excited from "@/assets/兴奋.png"
+import {postEmotionDiary}from '@/api/admin.js'
 
+
+const emodata=reactive({
+"diaryDate":"",
+"moodScore":0,
+"dominantEmotion":"",
+"emotionTriggers":"",
+"diaryContent":"",
+"sleepQuality":0,
+"stressLevel":0,
+})
+
+const postdiary=async()=>{
+  emodata.diaryDate=new Date().toLocaleDateString()
+  emodata.moodScore=score.value;
+
+}
 
 // --- 独立且可复用的算法与核心逻辑模块 ---
 
@@ -143,8 +169,14 @@ const images = {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* 卡片整体样式 */
+.emotion-btn {
+  width: 100%;
+  height: auto !important; 
+  padding: 16px 0 !important; /* 上下留出间距，左右靠内容撑 */
+  margin: 5px;
+}
 .cardscontainer{
   display: flex;
   justify-content: center;
@@ -159,16 +191,19 @@ const images = {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.01);
   .emotion-item{
 
-    display: flex;
+    display: inline-flex;;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex:1;
+    gap: 5px;
 
-.icon-placeholder{
-width:  70px;
-height: 70px;
-}
+
+
+    .icon-placeholder{
+    width:  70px;
+    height: 70px;
+
+    }
 
   }
 }
