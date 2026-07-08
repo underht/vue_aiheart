@@ -155,6 +155,9 @@ const postdiary=async()=>{
   emodata.moodScore=score.value;
   emodata.dominantEmotion=emotions.value[selectedEmotion.value].label;
   console.log(emodata);
+  const res=await postEmotionDiary(emodata);
+
+  console.log(res);
   
   
 

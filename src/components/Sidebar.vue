@@ -10,7 +10,9 @@
             class="el-menu-vertical-demo"
             >
             <div class="brand">
-                <el-image :src="robotImage" alt="Logo" class="ui"/>
+                <el-image :src="robotImage" alt="Logo" class="ui"
+                @click="$router.push('/home')"
+                />
                 <div v-show="!isCollapsing">
                     <h4 class="title">心理健康助手</h4>
                     <p class="subtitle">管理后台</p>
