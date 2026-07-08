@@ -70,7 +70,8 @@
                 </p>
                 <el-input
                 type="textarea"
-                rows=4 v-model="emodata.emotionTriggers">
+                rows=4 
+                v-model="emodata.emotionTriggers">
                 </el-input>
             </div>
             <div class="quastion">
@@ -79,7 +80,8 @@
                 </p>
                 <el-input
                 type="textarea"
-                rows=4 v-model="emodata.diaryContent">
+                rows=4 
+                v-model="emodata.diaryContent">
                 </el-input>
             </div>
             <div style="display: flex;flex-direction: row;gap:10px">
@@ -111,7 +113,8 @@
             </div>
             </div>
            </el-card>
-           <el-card>
+           <el-card class="emotion-card" :body-style="{ padding: '24px' }" 
+           style="display: flex; flex-direction: row-reverse;">
             <el-button @click="postdiary">提交</el-button>
            </el-card>
         </div>
