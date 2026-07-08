@@ -877,3 +877,8 @@ export const postEmotionDiary = (data) => {
 export const getEmotionAnalysis = (sessionId) => {
     return service.post(`/psychological-chat/session/${sessionId}/emotion`);
 }
+
+
+export const UserGetArticleList = (data) => {
+    return service.get("/knowledge/article/page", data);
+}
