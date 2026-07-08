@@ -16,7 +16,7 @@
                     <el-card class="article_card">
                         <div class="card_content">
                             <div class="cover_box">
-                                <img :src="item.coverImage" alt="文章封面" class="cover_img" />
+                                <el-image :src="getImg(item.coverImage)" alt="文章封面" class="cover_img" />
                             </div>
 
                             <div class="info_box">
@@ -55,6 +55,13 @@ const pageNation=reactive({
     total:0
 })
 
+const commandPageNation=reactive({
+    currentPage:1,
+    size:5,
+    total:0
+})
+const commandArticleList=ref([])
+
 const articleList=ref([])
 const getArticleList=async()=>{
     const params={
@@ -66,7 +73,7 @@ const getArticleList=async()=>{
 
     try{
         const res=await UserGetArticleList(params)
-        console.log(res);
+        console.log( "文章列表",res);
         articleList.value=res.data.records
         pageNation.total=res.data.total
 
@@ -76,8 +83,28 @@ const getArticleList=async()=>{
     }
 }
 
+const getCommandArticleList=async()=>{
+    const params={
+        currentPage:commandPageNation.currentPage,
+        size:commandPageNation.size,
+        sortField:'readCount',
+        sortDirection:'desc',
+    }
+
+    try{
+        const res=await UserGetArticleList(params)
+        console.log("推荐文章","res");
+        commandArticleList.value=res.data.records;
+        commandPageNation.total=res.data.total;
+
+    }catch(error){
+        console.log(error);
+        
+    }
+}
 onMounted(async()=>{
     getArticleList()
+    getCommandArticleList()
 })
 
 </script>
