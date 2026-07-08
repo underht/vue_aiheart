@@ -223,7 +223,7 @@ import { Plus, UserFilled, ChatDotRound, Service } from '@element-plus/icons-vue
 import { onMounted, ref } from 'vue'
 // 引入 Element Plus 官方的纸飞机/发送图标
 import { Position } from '@element-plus/icons-vue'
-import {sendfirstmessage,getsessionlist,userdeletsession,usergetsession} from '@/api/admin.js'
+import {sendfirstmessage,getsessionlist,userdeletsession,usergetsession,getEmotionAnalysis} from '@/api/admin.js'
 import { ElMessage } from 'element-plus'
 import {
   Delete,
@@ -282,13 +282,17 @@ const handleSend = async() => {
         await getsessions(cleanId);
 
     }
-    const sessionid=currentSession.value.sessionId.split('_')[1];
+    // 提取数字ID用于stream接口
+    const sessionid = String(currentSession.value.sessionId).includes('_') 
+        ? String(currentSession.value.sessionId).split('_')[1] 
+        : currentSession.value.sessionId;
     const message=inputText.value 
-    console.log("当前会话信息",currentSession.value);
-    console.log("当前对话列表",sessions);
-    console.log("发送的sessionid",sessionid);
-    console.log("发送的msg",message);
+    // console.log("当前会话信息",currentSession.value);
+    // console.log("当前对话列表",sessions);
+    // console.log("发送的sessionid",sessionid);
+    // console.log("发送的msg",message);
     sessions.value.push({id:`user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,senderType:1,content:message,creatAt:Date.now(),})
+    inputText.value = ''  // 清空输入框
     startaisession(sessionid,message);
 
     
@@ -320,7 +324,8 @@ const getsessions = async (id) => {
         console.log('获得会话',res);
         sessions.value=res.data;
         console.log("row信息",row);
-        currentSession.value.sessionId=id
+        // 保存完整的sessionId格式以供后续使用
+        currentSession.value.sessionId=`session_${id}`
         currentSession.value.status="active"
         // currentSession.value.startTime=row.startedAt
         currentSession.value.messageCount=res.data.length
@@ -355,17 +360,23 @@ const startaisession=(sessionId,inputText)=>{
     }
     sessions.value.push(aiMessage)//聊天的最后一条
     const ctrl=new AbortController();
+    
+    // 确保 sessionId 是字符串格式，尝试完整格式
+    const finalSessionId = String(sessionId).includes('session_') ? sessionId : `session_${sessionId}`;
+    const requestBody = {
+        "sessionId": finalSessionId,
+        "userMessage": inputText
+    };
+    console.log('发送stream请求，body:', requestBody);
+    
     fetchEventSource('/api/psychological-chat/stream', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Token': localStorage.getItem('token'),
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
             'Accept': 'text/event-stream',//干啥用的
         },
-        body: JSON.stringify({
-            "sessionId": sessionId,
-            "userMessage": inputText
-        }),
+        body: JSON.stringify(requestBody),
         signal:ctrl.signal,
         onopen: (reponse) => {
             // console.log(reponse)
@@ -374,7 +385,7 @@ const startaisession=(sessionId,inputText)=>{
             }
         },
         onmessage: (event) => {
-            console.log("event",event);
+            // console.log("event",event);
             
             const raw=event.data;
             if(!raw){
@@ -387,28 +398,41 @@ const startaisession=(sessionId,inputText)=>{
                 ctrl.abort();
                 return
             }
-            console.log("raw信息",raw);
+            // console.log("raw信息",raw);
             
             const payload=JSON.parse(raw);
             const ok=String(payload.code)==='200';
             if(ok&&payload.data&&payload.data.content){
                 aiMessage.content+=payload.data.content
             }else if (!ok){
-                console.log("返回信息",payload);
-                
+                // console.log("返回信息",payload);
                 handleError(payload.msg);
             }
         },
-        onerror: (error) => {
-            console.log(error);
-            aiissending.value=false;
+        onerror: (err) => {
+            console.log('Stream error:', err);
+            const raw = err.data;
+            if (raw) {
+                try {
+                    const payload = JSON.parse(raw);
+                    if (payload.msg) {
+                        handleError(payload.msg);
+                    }
+                } catch (e) {
+                    handleError('流传输出错');
+                }
+            } else {
+                handleError('流传输出错');
+            }
+            aiissending.value = false;
             ctrl.abort();
-            ElMessage.error('AI出错了');
         },
         onclose: (event) => {
-            console.log(event);
+            // console.log(event);
             aiissending.value=false;
             ctrl.abort();
+            getanalysis(finalSessionId);
+
             //分析情绪
         },
 
@@ -442,11 +466,26 @@ const deletesession=async(id)=>{
         
     }
 }
+const ananlysis=ref({})
+const getanalysis=async(finalSessionId)=>{
+    
+const res=await getEmotionAnalysis(finalSessionId);
+ananlysis.value=res
+
+}
 
 onMounted(async () => {
     creatnewsession();
     getsessionspage();
+    if(!!currentSession.value){
+        if(!currentSession.value.sessionId.startsWith('temp')){
+            console.log("当前sessionid：",currentSession?.value.sessionId);
+            await getanalysis(currentSession?.value.sessionId);
+        }
+
+    }
     console.log("会话",sessions);
+    console.log("分析结果",ananlysis);
     
 })
 

@@ -871,3 +871,9 @@ export const postEmotionDiary = (data) => {
     return service.post("/emotion-diary", data);
     
 }
+
+
+// 获取会话情绪分析结果
+export const getEmotionAnalysis = (sessionId) => {
+    return service.post("/psychological-chat/session/"+{sessionId}+"/emotion");
+}
