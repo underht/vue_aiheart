@@ -13,7 +13,9 @@
             <div class="right">
 
                 <el-row v-for="item in articleList" :key="item.id"> 
-                    <el-card class="article_card">
+                    <el-card class="article_card"
+                    @click="router.push(`/knowledge/article/${item.id}`)"
+                    >
                         <div class="card_content">
                             <div class="cover_box">
                                 <el-image :src="getImg(item.coverImage)" alt="文章封面" class="cover_img" />
@@ -48,7 +50,9 @@
 <script setup>
 import { onMounted,ref ,reactive } from 'vue'
 import {UserGetArticleList} from '../api/admin.js'
+import { useRouter } from 'vue-router'
 
+const router=useRouter()
 const pageNation=reactive({
     currentPage:1,
     size:10,
@@ -102,6 +106,11 @@ const getCommandArticleList=async()=>{
         
     }
 }
+const getImg=(url)=>{
+
+    return url? "http://159.75.169.224:1235"+url :"https://file.itndedu.com/psychology_ai.png"
+
+}
 onMounted(async()=>{
     getArticleList()
     getCommandArticleList()
@@ -137,7 +146,7 @@ onMounted(async()=>{
             // flex: 1; /* 核心算法：让右边自动占满剩下的所有宽度 */
             width: 70%;
             .article_card{
-                width: 800px;
+                width: 700px;
             
                 margin-bottom: 10px;
             }

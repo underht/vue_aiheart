@@ -882,3 +882,6 @@ export const getEmotionAnalysis = (sessionId) => {
 export const UserGetArticleList = (data) => {
     return service.get("/knowledge/article/page", data);
 }
+export const UserGetArticle = (id) => {
+    return service.get("/knowledge/article/" + id);
+}

@@ -73,6 +73,13 @@ const routes = [
                     icon: "Book"
                  }
             },{
+                    path:"/knowledge/article/:id",
+                    component: () => import("@/views/ArticleDetail.vue"),
+                    meta: { title: "文章详情",
+                        icon: "Book"
+                     }
+            },
+            {
                 path:"/consultation",
                 component: () => import("@/views/FrontendConsultation.vue"),
                 meta: { title: "咨询",
