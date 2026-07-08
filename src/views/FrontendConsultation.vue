@@ -467,14 +467,15 @@ onMounted(async () => {
         flex-direction: row-reverse;
 .dashboard-container {
   display: flex;
-  gap: 10px;
-  padding-right:10px;
+  gap: 12px;
+  padding-right: 10px;
   background-color: #f5f7fa;
   min-height: 200px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex-direction: column;
   width: 80%;
   height: 95%;
+  box-sizing: border-box;
 }
     }
     .right-container {
@@ -498,9 +499,10 @@ onMounted(async () => {
 
 
 .card-item {
-  /* flex: 1; */
+  flex: 1;
   min-width: 200px;
   width: 100%;
+  min-height: 0;
   border-radius: 12px;
   background: #ffffff;
   transition: all 0.3s ease;
@@ -513,6 +515,8 @@ onMounted(async () => {
 .card-content {
   padding: 0;
   width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 /* 第一个卡片样式 */
