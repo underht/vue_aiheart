@@ -1,5 +1,7 @@
 <template>
     <div class="main">
+        <el-scrollbar style="width: 100%;">
+
         <div class="cardscontainer">
 
           <el-card class="emotion-card" :body-style="{ padding: '24px' }">
@@ -58,9 +60,55 @@
           </el-card>
            <el-card class="emotion-card" :body-style="{ padding: '24px' }">
             <div class="card-header"><h2>详细记录</h2></div>
-            
+            <div class="quastion">
+                <p>
+                  情绪触发原因
+                </p>
+                <el-input
+                type="textarea"
+                rows="4" v-model="emodata.emotionTriggers">
+                </el-input>
+            </div>
+            <div class="quastion">
+                <p>
+              今日感想
+                </p>
+                <el-input
+                type="textarea"
+                rows="4" v-model="emodata.diaryContent">
+                </el-input>
+            </div>
+            <div style="">
+            <div class="quastion">
+                <p>
+              睡眠质量
+                </p>
+              <el-select v-model="sleepQuality" placeholder="label" style="width: 240px">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+            </div>
+            <div class="quastion">
+                <p>
+              压力等级
+                </p>
+                <el-select v-model="stressLevel" placeholder="label" style="width: 240px">
+                    <el-option
+                      v-for="item in stressoptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+            </div>
+            </div>
            </el-card>
         </div>
+      </el-scrollbar>
     </div>
     
     
@@ -156,6 +204,23 @@ const emotions = ref([
   { key: 'confused', label: '困惑', color: '#303133' }
 ])
 
+const options=ref([
+{label:"很差",value:1},
+{label:"较差",value:2},
+{label:"一般",value:3},
+{label:"良好",value:4},
+{label:"优秀",value:5},
+
+])
+
+const stressoptions=ref([
+{label:"很低",value:1},
+{label:"较低",value:2},
+{label:"一般",value:3},
+{label:"较高",value:4},
+{label:"很高",value:5},
+
+])
 // 图片映射，模板中通过 emotions 的 key 来取对应图片
 const images = {
   happy,
@@ -177,12 +242,21 @@ const images = {
   padding: 16px 0 !important; /* 上下留出间距，左右靠内容撑 */
   margin: 5px;
 }
+.main{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 .cardscontainer{
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+}
+
 
 .emotion-card {
   max-width: 800px;
