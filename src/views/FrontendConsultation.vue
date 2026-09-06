@@ -460,11 +460,19 @@ const deletesession=async(id)=>{
         const res=await userdeletsession(id);
         console.log(res);
         getsessionspage();
-        ElMessage('删除成功');
+        if(res.code==='200'){
+            ElMessage.success('删除成功');
+            location.reload();
+        }else{
+            ElMessage.error('删除失败');
+        }
+
+
     } catch (error) {
         console.log(error);
         
     }
+
 }
 const ananlysis=ref({})
 const getanalysis=async()=>{
