@@ -57,36 +57,37 @@ const routes = [
             }
         ]
     },{
-        path: "",
+        path: "/",
+        redirect: "/home",
         component: FrontendLayout,
         children:[
             {
-                path:"/home",
+                path:"home",
                 component: () => import("@/views/Home.vue"),
                 meta: { title: "首页",
                     icon: "Home"
                  }
             },{
-                path:"/knowledge",
+                path:"knowledge",
                 component: () => import("@/views/FrontendKnowledge.vue"),
                 meta: { title: "知识库",
                     icon: "Book"
                  }
             },{
-                    path:"/knowledge/article/:id",
+                    path:"knowledge/article/:id",
                     component: () => import("@/views/ArticleDetail.vue"),
                     meta: { title: "文章详情",
                         icon: "Book"
                      }
             },
             {
-                path:"/consultation",
+                path:"consultation",
                 component: () => import("@/views/FrontendConsultation.vue"),
                 meta: { title: "咨询",
                     icon: "Chat"
                  }
             },{
-                path:"/emotiondiary",
+                path:"emotiondiary",
                 component: () => import("@/views/EmotionDiary.vue"),
                 meta: { title: "情绪日志",
                     icon: "File"
@@ -95,7 +96,7 @@ const routes = [
 
 
         ]
-    }
+    },
 ];
 
 const router = createRouter({
