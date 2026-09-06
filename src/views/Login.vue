@@ -113,7 +113,7 @@ const handleLogin = async () => {
   max-width: 480px;
   margin: 0 auto;
   padding: 24px;
-  background: rgba(255,255,255,0.02);
+  background: var(--bg-translucent-color);
   border-radius: 8px;
 }
 
@@ -122,7 +122,7 @@ const handleLogin = async () => {
   justify-content: space-between;
   margin-top: 12px;
   .link {
-    color: #409EFF;
+    color: var(--primary-color);
     cursor: pointer;
   }
 }

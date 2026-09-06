@@ -19,7 +19,7 @@
       @onChange="handleChange"
     />
     <!-- 字数统计区域 -->
-    <div style="padding: 5px 10px; text-align: right; color: #999; font-size: 14px;">
+    <div style="padding: 5px 10px; text-align: right; color: var(--text-muted-color); font-size: 14px;">
       当前字数：{{ wordCount }} 字
     </div>
   </div>

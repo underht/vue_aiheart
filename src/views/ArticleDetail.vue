@@ -90,20 +90,20 @@ onMounted(() => {
   margin: 40px auto;
   padding: 0 20px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: #333;
+  color: var(--text-color);
 }
 
 // 骨架加载状态
 .loading-state {
   text-align: center;
   padding: 100px 0;
-  color: #999;
+  color: var(--text-muted-color);
   font-size: 16px;
 }
 
 // 主体卡片样式
 .article-card {
-  background: #ffffff;
+  background: var(--bg-color);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
@@ -138,8 +138,8 @@ onMounted(() => {
     margin-bottom: 12px;
 
     .category-badge {
-      background-color: #e8ffea;
-      color: #00b42a;
+      background-color: var(--bg-success-light-color);
+      color: var(--success-color);
       padding: 4px 12px;
       border-radius: 4px;
       font-size: 13px;
@@ -151,8 +151,8 @@ onMounted(() => {
       padding: 4px 8px;
       border-radius: 4px;
       &.offline {
-        background-color: #ffeceb;
-        color: #f53f3f;
+        background-color: var(--bg-danger-light-color);
+        color: var(--danger-color);
       }
     }
   }
@@ -161,7 +161,7 @@ onMounted(() => {
     font-size: 30px;
     font-weight: 700;
     line-height: 1.4;
-    color: #1d2129;
+    color: var(--text-heading-color);
     margin: 0 0 16px 0;
   }
 
@@ -172,10 +172,10 @@ onMounted(() => {
     flex-wrap: wrap;
     gap: 12px;
     font-size: 14px;
-    color: #86909c;
+    color: var(--text-light-color);
 
     .author-name {
-      color: #4e5969;
+      color: var(--text-regular-color);
       font-weight: 600;
     }
 
@@ -184,7 +184,7 @@ onMounted(() => {
       align-items: center;
       gap: 8px;
       .divider {
-        color: #e5e6eb;
+        color: var(--text-muted-color);
       }
     }
   }
@@ -193,11 +193,11 @@ onMounted(() => {
   .article-summary {
     margin-top: 16px;
     padding: 12px 16px;
-    background-color: #f7f8fa;
+    background-color: var(--bg-color);
     border-left: 4px solid #165dff;
     border-radius: 0 4px 4px 0;
     font-size: 14px;
-    color: #4e5969;
+    color: var(--text-regular-color);
     line-height: 1.6;
   }
 }
@@ -206,7 +206,7 @@ onMounted(() => {
 .article-content {
   font-size: 16px;
   line-height: 1.8;
-  color: #27282d;
+  color: var(--text-strong-color);
   word-break: break-word;
 
   :deep(p) {
@@ -234,15 +234,15 @@ onMounted(() => {
     gap: 8px;
 
     .tag-item {
-      background: #f2f3f5;
-      color: #4e5969;
+      background: var(--bg-color);
+      color: var(--text-regular-color);
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 13px;
       transition: all 0.2s;
       &:hover {
-        background: #e5e6eb;
-        color: #1d2129;
+        background: var(--bg-color);
+        color: var(--text-heading-color);
       }
     }
   }

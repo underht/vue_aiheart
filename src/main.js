@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router' // 确保路径正确
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import './assets/index.css'
 // main.ts
 
 import { createPinia } from 'pinia'
@@ -24,4 +25,3 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
-    

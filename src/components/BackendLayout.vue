@@ -8,7 +8,7 @@
             <Navbar class="navbar-header"/>
         </el-header>
 
-        <el-main style="background-color: #f5f5f5;">
+        <el-main style="background-color: var(--bg-color);">
             <router-view  class="router-view"/>
         </el-main>
       </el-container>
@@ -26,11 +26,11 @@ import Navbar from './Navbar.vue';
 <style lang="scss" scoped>
 
   .navbar-header {
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     // height: 60px;
   }
   .main-sidebar {
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     height: 100%;
   }
 
@@ -43,7 +43,7 @@ import Navbar from './Navbar.vue';
 .router-view {
   flex: 1;
   overflow: auto;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     height: 100%;
 
 }

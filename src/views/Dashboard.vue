@@ -479,7 +479,7 @@ onMounted(async() => {
                     align-items:center;
                     margin: 0;
                     font-size: 12px;
-                    color: #666;
+                    color: var(--text-secondary-color);
                 }
             }
         }
@@ -500,7 +500,7 @@ onMounted(async() => {
             justify-content:center;
             height: 80px;
             width:  80px;
-            background-color: #a3a3a3;
+            background-color: var(--text-muted-color);
             border-radius: 8px;        /* 设置圆角大小，如果是 50% 则会变成正圆形 */
             overflow: hidden;          /* 关键！裁切掉内部图片超出圆角部分的直角 */
             display: flex;
@@ -513,7 +513,7 @@ onMounted(async() => {
             }
         }
         .words{
-            color: #666;
+            color: var(--text-secondary-color);
             height: 60px;
         // 1. 开启 Flex 布局
             display: flex;             

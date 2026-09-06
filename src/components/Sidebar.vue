@@ -57,7 +57,7 @@ const isCollapsing = computed(() => useAdminStore().isCollapsing);
 <style lang="scss" scoped>
 .sidebar-container {
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--bg-color);
 }
 
 .brand {

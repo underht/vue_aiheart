@@ -26,7 +26,7 @@
             to="/auth/register" 
             class="register-btn"
           >
-            <p style="color: aliceblue;margin: 0;">注册</p>
+            <p style="color: var(--text-on-primary-color); margin: 0;">注册</p>
           </router-link>
           <el-button type="danger" plain class="logout-btn" v-if="islogin" @click="handlelogout">退出登录</el-button>
         </div>
@@ -77,7 +77,7 @@ onMounted(() => {
   justify-content: space-between;
   height: 64px;
   padding: 0 32px;
-  background-color: #ffffff;
+  background-color: var(--bg-color);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   user-select: none;
 }
@@ -95,20 +95,20 @@ onMounted(() => {
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  background: var(--bg-gradient-color);
   border-radius: 10px;
 }
 
 .brand-icon {
   font-size: 20px;
-  color: #0284c7;
+  color: var(--primary-color);
 }
 
 .brand-name {
   font-size: 18px;
   font-weight: 600;
   width: 160px;
-  color: #1e293b;
+  color: var(--text-slate-color);
   letter-spacing: 0.5px;
 }
 
@@ -136,7 +136,7 @@ onMounted(() => {
   height: 100%;
   width: 60px;
   font-size: 15px;
-  color: #64748b;
+  color: var(--text-secondary-color);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.25s ease;
@@ -145,12 +145,12 @@ onMounted(() => {
 }
 
 .nav-item:hover {
-  color: #0284c7;
+  color: var(--primary-color);
 }
 
 /* 路由激活时的视觉样式 (Vue Router 自动添加的类名) */
 .nav-item.router-link-active {
-  color: #0284c7;
+  color: var(--primary-color);
   font-weight: 600;
 }
 
@@ -161,7 +161,7 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 3px;
-  background-color: #0284c7;
+  background-color: var(--primary-color);
   border-radius: 3px 3px 0 0;
 }
 
@@ -169,7 +169,7 @@ onMounted(() => {
 .divider {
   width: 1px;
   height: 16px;
-  background-color: #e2e8f0;
+  background-color: var(--bg-color);
 }
 
 /* 按钮区域布局 */
@@ -182,14 +182,14 @@ onMounted(() => {
 /* 登录文字链接 */
 .login-link {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-secondary-color);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.25s;
 }
 
 .login-link:hover {
-  color: #0284c7;
+  color: var(--primary-color);
 }
 
 /* 注册按钮：符合整体UI的圆角与高亮 */
@@ -197,14 +197,14 @@ onMounted(() => {
   border-radius: 8px;
   padding: 8px 18px;
   font-weight: 500;
-  background-color: #0284c7;
-  border-color: #0284c7;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   transition: all 0.25s;
 }
 
 .register-btn:hover {
-  background-color: #0369a1;
-  border-color: #0369a1;
+  background-color: var(--primary-dark-color);
+  border-color: var(--primary-dark-color);
   transform: translateY(-1px);
 }
 
@@ -221,7 +221,7 @@ onMounted(() => {
 
 /* 页脚主容器：采用与图片一致的深色高级调性（深蓝灰） */
 .footer-container {
-  background-color: #1e2530; /* 深色背景 */
+  background-color: var(--bg-footer-color); /* 深色背景 */
 
   padding: 10px 0;
   width: 100%;
@@ -245,7 +245,7 @@ onMounted(() => {
 /* 版权文字样式优化：提升文字细腻度 */
 .copyright-text {
   font-size: 14px;
-  color: #94a3b8; /* 柔和的浅灰字色，降低刺眼度 */
+  color: var(--text-footer-muted-color); /* 柔和的浅灰字色，降低刺眼度 */
   letter-spacing: 0.5px;
   margin: 0;
   font-weight: 400;
@@ -255,7 +255,7 @@ onMounted(() => {
 
 /* 鼠标悬浮时微亮交互 */
 .copyright-text:hover {
-  color: #cbd5e1;
+  color: var(--text-footer-color);
 }
 .main-view{
   height: calc(100vh - 84px);

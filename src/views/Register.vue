@@ -157,7 +157,7 @@ const handleRegister = async () => {
   padding: 0;
   height: 100%;
   width: 100% ;
-  background-color: #fcfcfc;
+  background-color: var(--bg-color);
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
@@ -169,11 +169,11 @@ const handleRegister = async () => {
     align-items: center;
     gap: 6px;
     cursor: pointer;
-    color: #909399;
+    color: var(--text-muted-color);
     font-size: 14px;
     transition: color 0.25s;
     &:hover {
-      color: #4a90e2;
+      color: var(--register-link-color);
     }
   }
 }
@@ -190,14 +190,14 @@ const handleRegister = async () => {
   .main-title {
     font-size: 32px;
     font-weight: 700;
-    color: #000000;
+    color: var(--text-color);
     margin: 0 0 12px 0;
     letter-spacing: 1px;
   }
 
   .sub-title {
     font-size: 15px;
-    color: #8a8a8a;
+    color: var(--text-muted-color);
     margin: 0;
   }
 }
@@ -227,8 +227,8 @@ const handleRegister = async () => {
 .submit-btn {
   width: 100%;
   height: 46px;
-  background-color: #5392f4 !important; /* 还原图中的亮蓝色 */
-  border-color: #5392f4 !important;
+  background-color: var(--register-primary-color) !important; /* 还原图中的亮蓝色 */
+  border-color: var(--register-primary-color) !important;
   font-size: 15px;
   font-weight: 500;
   border-radius: 6px;
@@ -249,12 +249,12 @@ const handleRegister = async () => {
   padding: 0;
 
   .text-muted {
-    color: #333333;
+    color: var(--text-color);
     font-weight: 500;
   }
 
   .link {
-    color: #3f367e; /* 还原图中略偏深紫蓝的文字色 */
+    color: var(--register-accent-color); /* 还原图中略偏深紫蓝的文字色 */
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;

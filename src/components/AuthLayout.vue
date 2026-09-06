@@ -42,7 +42,7 @@ const imglink = new URL('../assets/rbt.png', import.meta.url).href
   justify-content: center;
   width: 50%;
   height: 100vh;
-  background-color: #588e7e;  /* 保持与图片一致的绿色背景 */
+  background-color: var(--brand-teal-color);  /* 保持与图片一致的绿色背景 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   box-sizing: border-box;
   padding: 0;
@@ -62,7 +62,7 @@ const imglink = new URL('../assets/rbt.png', import.meta.url).href
 .main-title {
   font-size: 40px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-on-primary-color);
   margin: 0 0 24px 0;
   letter-spacing: 2px;     /* 字间距微调，更显大气 */
 }
@@ -70,7 +70,7 @@ const imglink = new URL('../assets/rbt.png', import.meta.url).href
 /* ================= 2. 副文本样式 ================= */
 .description-text {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9); /* 半透明白，降低视觉刺眼度 */
+  color: var(--text-on-primary-color); /* 半透明白，降低视觉刺眼度 */
   line-height: 1.8;        /* 舒适的行高 */
   margin: 0 0 40px 0;
   white-space: pre-wrap;   /* 允许文本根据容器自动换行 */
@@ -90,7 +90,7 @@ const imglink = new URL('../assets/rbt.png', import.meta.url).href
   justify-content: center;
   width: 160px;
   height: 160px;
-  background-color: rgba(255, 255, 255, 0.12); /* 淡淡的半透明白圈 */
+  background-color: var(--bg-white-overlay-color); /* 淡淡的半透明白圈 */
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 柔和阴影带来立体感 */
@@ -104,7 +104,7 @@ const imglink = new URL('../assets/rbt.png', import.meta.url).href
 
 .robot-icon {
   font-size: 64px;
-  color: #ffffff;
+  color: var(--text-on-primary-color);
 }
 .right{
   width: 50%;

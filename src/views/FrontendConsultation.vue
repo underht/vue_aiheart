@@ -192,7 +192,7 @@
                                 :disable="aiissending"
                             />
                             
-                            <el-row justify="space-between" style="margin-top: 6px; color: #a8abb2; font-size: 12px;">
+                            <el-row justify="space-between" style="margin-top: 6px; color: var(--text-placeholder-color); font-size: 12px;">
                                 <span>按Enter发送，Shift+Enter换行</span>
                                 <span>{{ inputText.length }}/500</span>
                             </el-row>
@@ -507,7 +507,7 @@ onMounted(async () => {
     flex-direction: row;
     width: 100%;
     height: 100%;
-    background-color: #f5f7fa;   
+    background-color: var(--bg-color);
     .left-container {
         width: 40%;
         height: 100%;
@@ -518,7 +518,7 @@ onMounted(async () => {
   display: flex;
   gap: 12px;
   padding-right: 10px;
-  background-color: #f5f7fa;
+  background-color: var(--bg-color);
   min-height: 200px;
   flex-wrap: nowrap;
   flex-direction: column;
@@ -538,7 +538,7 @@ onMounted(async () => {
           display: flex;
             margin: 0;
           flex-direction: column;
-          background-color: #ffffff;
+          background-color: var(--bg-color);
           border-radius: 16px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
           overflow: hidden;
@@ -553,7 +553,7 @@ onMounted(async () => {
   width: 100%;
   min-height: 0;
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--bg-color);
   transition: all 0.3s ease;
 }
 
@@ -578,7 +578,7 @@ onMounted(async () => {
 .ai-title {
   font-size: 16px;
   font-weight: 600;
-  color: #303133;
+  color: var(--text-color);
 }
 
 /* 第二个卡片样式 */
@@ -591,7 +591,7 @@ onMounted(async () => {
 .emotion-title {
   font-size: 16px;
   font-weight: 600;
-  color: #303133;
+  color: var(--text-color);
 }
 
 .emotion-display {
@@ -609,7 +609,7 @@ onMounted(async () => {
 
 .today-label {
   font-size: 14px;
-  color: #606266;
+  color: var(--text-secondary-color);
 }
 
 .today-options {
@@ -618,9 +618,9 @@ onMounted(async () => {
 }
 
 .active-tag {
-  background-color: #409EFF !important;
-  color: #ffffff !important;
-  border-color: #409EFF !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-on-primary-color) !important;
+  border-color: var(--primary-color) !important;
 }
 
 /* 第三个卡片样式 */
@@ -634,13 +634,13 @@ onMounted(async () => {
 
 .suggestion-label {
   font-size: 14px;
-  color: #606266;
+  color: var(--text-secondary-color);
   font-weight: 500;
 }
 
 .suggestion-text {
   font-size: 14px;
-  color: #303133;
+  color: var(--text-color);
   padding: 4px 0;
 }
 
@@ -658,7 +658,7 @@ onMounted(async () => {
 
     p{
       font-size: 10px;
-      color: #303133;
+      color: var(--text-color);
   margin: 0;
 
     }
@@ -680,13 +680,13 @@ onMounted(async () => {
 
 .history-label {
   font-size: 14px;
-  color: #606266;
+  color: var(--text-secondary-color);
   font-weight: 500;
 }
 
 .history-empty {
   font-size: 14px;
-  color: #909399;
+  color: var(--text-muted-color);
   padding: 4px 0;
 }
 
@@ -700,7 +700,7 @@ onMounted(async () => {
     width: 100%;
     box-sizing: border-box;
     border-bottom: 1px solid #898989; 
-    background-color: #c77b29;
+    background-color: var(--bg-warning-color);
     
     .chat-title {
         display: flex;
@@ -713,7 +713,7 @@ onMounted(async () => {
 .img-wrapper {
     height: 48px;
     width: 48px;
-    background-color: #f0f2f5;
+    background-color: var(--bg-color);
     border-radius: 50%; 
     overflow: hidden; 
     display: flex;
@@ -732,28 +732,28 @@ onMounted(async () => {
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--text-on-primary-color);
         line-height: 1.4;
     }
 
     .title-sub {
         margin: 0;
         font-size: 13px;
-        color: #ffffff;
+        color: var(--text-on-primary-color);
         line-height: 1.4;
     }
 }
 
 .action-btn {
     border: 1px solid #dcdfe6 !important;
-    color: #606266 !important;
-    background: #ffffff !important;
+    color: var(--text-secondary-color) !important;
+    background: var(--bg-color) !important;
     transition: all 0.2s ease-in-out;
 
     &:hover {
-        color: #409eff !important;
-        border-color: #c6e2ff !important;
-        background-color: #ecf5ff !important;
+        color: var(--primary-color) !important;
+        border-color: var(--primary-light-color) !important;
+        background-color: var(--bg-color) !important;
         transform: scale(1.05);
     }
 }
@@ -765,7 +765,7 @@ onMounted(async () => {
     flex: 1;
     padding: 24px;
     overflow-y: auto; /* 保证当内容过多时可以顺畅滚动 */
-    background-color: #fcfcfd; /* 聊天背景使用极为微弱的灰白区分工作区 */
+    background-color: var(--bg-color); /* 聊天背景使用极为微弱的灰白区分工作区 */
 }
 
 .chat-messages {
@@ -787,8 +787,8 @@ onMounted(async () => {
     justify-content: flex-start;
     
     .chat-avatar {
-        background-color: #eff5ff;
-        color: #409eff;
+        background-color: var(--bg-color);
+        color: var(--primary-color);
         border: 1px solid #d9e8ff;
     }
 }
@@ -801,7 +801,7 @@ onMounted(async () => {
     max-width: 70%; /* 限制气泡最大宽度，防止单行文字撑满屏幕过长 */
     .message-time{
         font-size: 12px;
-        color: #909399;
+        color: var(--text-muted-color);
         text-align: left;
     }
 }
@@ -809,7 +809,7 @@ onMounted(async () => {
 /* 用户名字样式：轻量、优雅的排版 */
 .name {
     font-size: 12px;
-    color: #909399;
+    color: var(--text-muted-color);
     font-weight: 500;
     text-align: left;
     padding-left: 4px;
@@ -817,7 +817,7 @@ onMounted(async () => {
 
 /* 对话气泡主体样式（自适应高度与宽度） */
 .message-content {
-    background-color: #f0f5ff; /* AI 专属温和浅蓝色气泡 */
+    background-color: var(--bg-color); /* AI 专属温和浅蓝色气泡 */
     border: 1px solid #e0ebff;
     padding: 12px 16px;
     border-radius: 2px 16px 16px 16px; /* 细节：左上角小圆角，其余大圆角，天然形成对话尾巴视觉 */
@@ -826,7 +826,7 @@ onMounted(async () => {
     p {
         margin: 0;
         font-size: 14px;
-        color: #303133;
+        color: var(--text-color);
         line-height: 1.5;
         white-space: pre-wrap; /* 允许文本自动换行并保留换行符 */
         word-break: break-all; /* 防止英文大单词超出边界 */
@@ -848,13 +848,13 @@ onMounted(async () => {
     }
     
     .message-content {
-        background-color: #409eff; /* 用户专属高亮蓝气泡 */
+        background-color: var(--primary-color); /* 用户专属高亮蓝气泡 */
         border: none;
         border-radius: 16px 2px 16px 16px; /* 尾巴朝右 */
         box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
         
         p {
-            color: #ffffff; /* 白字提升易读性 */
+            color: var(--text-on-primary-color); /* 白字提升易读性 */
         }
     }
 }
@@ -863,7 +863,7 @@ onMounted(async () => {
 
 }
 .chat-input{
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     padding: 10px;
 }
 </style>

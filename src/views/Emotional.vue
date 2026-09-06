@@ -33,7 +33,7 @@
                     disabled
                     allow-half
                 />
-                <span style="color: #ff9900; font-size: 14px;">
+                <span style="color: var(--warning-color); font-size: 14px;">
                     {{ row.moodScore }} 分
                 </span>
                 </template>

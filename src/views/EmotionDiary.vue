@@ -269,8 +269,8 @@ const images = {
   margin: 5px;
 }
 .emotion-btn.is-active {
-  background-color: #ECF5FF !important; /* 选中的浅蓝色背景，可根据原型图微调 */
-  border-color: #409EFF !important;     /* 选中的蓝色边框 */
+  background-color: var(--bg-color) !important; /* 选中的浅蓝色背景，可根据原型图微调 */
+  border-color: var(--primary-color) !important;     /* 选中的蓝色边框 */
 
 }
 .main{
@@ -318,14 +318,14 @@ const images = {
 .card-header h2 {
   margin: 0 0 12px 0;
   font-size: 20px;
-  color: #303133;
+  color: var(--text-color);
   font-weight: 600;
 }
 
 .subtitle {
   margin: 0 0 20px 0;
   font-size: 14px;
-  color: #909399;
+  color: var(--text-muted-color);
 }
 
 /* 评分区域布局 */

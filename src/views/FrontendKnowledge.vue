@@ -194,18 +194,18 @@ onMounted(async()=>{
                 .article_title {
                     font-size: 18px;
                     font-weight: bold;
-                    color: #333;
+                    color: var(--text-color);
                 }
                 .article_tag {
-                    background-color: #eef5fe;
-                    color: #409eff;
+                    background-color: var(--bg-color);
+                    color: var(--primary-color);
                     border: none;
                 }
             }
 
             .meta_row {
                 font-size: 14px;
-                color: #666;
+                color: var(--text-secondary-color);
                 display: flex;
                 flex-direction: column;
                 gap: 6px; // 纵向各行小图标的间距

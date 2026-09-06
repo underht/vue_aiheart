@@ -47,7 +47,7 @@ const goToLogs = () => {
   justify-content: center;
   width: 100%;
   height: calc(100vh - 64px); /* 减去顶部导航栏高度，防止出现滚动条 */
-  background-color: #588e7e; /* 还原图片中的绿色底色 */
+  background-color: var(--brand-teal-color); /* 还原图片中的绿色底色 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   overflow-x: auto;
@@ -76,7 +76,7 @@ const goToLogs = () => {
 .main-title {
   font-size: 48px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-on-primary-color);
   line-height: 1.4;
   margin: 0 0 24px 0;
   letter-spacing: 1px;
@@ -84,12 +84,12 @@ const goToLogs = () => {
 
 /* 亮黄色高亮文本 */
 .highlight-text {
-  color: #f7d060; /* 还原图片中的琥珀黄 */
+  color: var(--brand-accent-color); /* 还原图片中的琥珀黄 */
 }
 
 .subtitle-text {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-on-primary-color);
   line-height: 1.8;
   margin: 0 0 40px 0;
   max-width: 480px;
@@ -103,8 +103,8 @@ const goToLogs = () => {
 
 /* 白色实心主按钮 */
 .btn-primary {
-  background-color: #ffffff;
-  color: #588e7e;
+  background-color: var(--bg-color);
+  color: var(--brand-teal-color);
   border: none;
   padding: 14px 28px;
   font-size: 15px;
@@ -115,7 +115,7 @@ const goToLogs = () => {
 }
 
 .btn-primary:hover {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: var(--bg-white-translucent-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -123,7 +123,7 @@ const goToLogs = () => {
 /* 透明镂空次按钮 */
 .btn-secondary {
   background-color: transparent;
-  color: #ffffff;
+  color: var(--text-on-primary-color);
   border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 14px 28px;
   font-size: 15px;
@@ -134,8 +134,8 @@ const goToLogs = () => {
 }
 
 .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: #ffffff;
+  background-color: var(--bg-white-subtle-overlay-color);
+  border-color: var(--text-on-primary-color);
   transform: translateY(-2px);
 }
 
@@ -154,7 +154,7 @@ const goToLogs = () => {
   justify-content: center;
   width: 280px;
   height: 280px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: var(--bg-white-overlay-color);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* 微弱的高级阴影 */
@@ -164,7 +164,7 @@ const goToLogs = () => {
 /* 机器人图标样式 */
 .robot-icon {
   font-size: 110px;
-  color: #ffffff;
+  color: var(--text-on-primary-color);
 }
 
 /* 简单的上下漂浮呼吸动画，让AI助手看起来是“活的” */

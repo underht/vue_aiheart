@@ -1,7 +1,7 @@
 <template>
     <div class="navbar">
         <div class="flex-box">
-            <el-button @click="handleCollapse"><Expand style="width: 20px; height: 20px; color: black;"/></el-button>
+            <el-button @click="handleCollapse"><Expand style="width: 20px; height: 20px; color: var(--text-color);"/></el-button>
             <!-- //button自带的插槽里面有slot -->
 
             <div class="pagetitle">
@@ -37,6 +37,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { logoutApi } from '@/api/admin'
 import { lo } from 'element-plus/es/locale/index.mjs'
+import {useDisplayStore} from '@/stores/display.js'
 const handleCollapse=()=>{
     useAdminStore().toggleCollapse()
     console.log('Navbar collapsed:', useAdminStore().isCollapsing)
@@ -77,12 +78,12 @@ const handlelogout = async () => {
     justify-content: space-between;
     align-items: center;
     padding: 0;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     height: 60px;
     .flex-box {
         display: flex;
         align-items: center;
-        color: rgb(0, 0, 0);
+        color: var(--text-color);
         .pagetitle {
             font-size: 18px;
             font-weight: bold;
@@ -94,7 +95,7 @@ const handlelogout = async () => {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: rgb(0, 0, 0);
+    color: var(--text-color);
     .user-info {
         display: flex;
         align-items: center;
