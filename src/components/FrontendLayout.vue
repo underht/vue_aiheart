@@ -15,6 +15,22 @@
           <router-link to="/knowledge" class="nav-item"> <p>知识库</p></router-link>
           <router-link to="/consultation" class="nav-item" v-if="islogin"> <p>AI咨询</p></router-link>
           <router-link to="/emotiondiary" class="nav-item" v-if="islogin"> <p>情绪日志</p></router-link>
+          <el-dropdown placement="bottom-end"><p  class="nav-item">更多</p>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>
+                  <router-link to="/back" > <p  class="nav-item">后台管理</p></router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <p v-if="displayStore.theme === 'light'" @click="displayStore.toggleTheme()">切换为暗黑模式</p>
+                  <p v-if="displayStore.theme === 'dark'" @click="displayStore.toggleTheme()">切换为浅色模式</p>
+
+                </el-dropdown-item>
+
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+
         </div>
 
         <div class="divider" v-if="!islogin"></div>
@@ -53,7 +69,8 @@
 import { Service } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue';
 import { logoutApi } from '@/api/admin.js';
-
+import {useDisplayStore} from '@/stores/display.js'
+const displayStore = useDisplayStore()
 const handlelogout = async() => {
   localStorage.removeItem('token');
   try {
