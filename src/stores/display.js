@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-export const useAdminStore = defineStore("display", () => {
+export const useDisplayStore = defineStore("display", () => {
     const theme = ref("light");
     
     function toggleTheme() {
