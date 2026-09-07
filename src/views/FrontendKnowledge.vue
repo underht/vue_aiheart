@@ -76,32 +76,44 @@ const hasMore = ref(true)
 let isLoadMoreTriggerVisible = false
 let articleObserver
 
-const getArticleList=async()=>{
+const getArticleList = async () => {
     if (isLoading.value || !hasMore.value) return
 
     isLoading.value = true
-    const params={
-        currentPage:pageNation.currentPage,
-        size:pageNation.size,
-        sortField:'publishedAt',
-        sortDirection:'desc',
+
+    console.log('请求前 currentPage:', pageNation.currentPage)
+
+    const params = {
+        currentPage: pageNation.currentPage,
+        size: pageNation.size,
+        sortField: 'publishedAt',
+        sortDirection: 'desc',
     }
 
-    try{
-        const res=await UserGetArticleList(params)
-        console.log( "文章列表",res);
-        const records = res.data.records || []
-        articleList.value.push(...records)
-        pageNation.total=res.data.total
-        hasMore.value = articleList.value.length < pageNation.total && records.length > 0
-        if (records.length > 0) pageNation.currentPage += 1
+    try {
+        const res = await UserGetArticleList(params)
 
-    }catch(error){
-        console.log(error);
+        console.log('后端返回 current:', res.data.current)
+
+        const records = res.data.records || []
+
+        articleList.value.push(...records)
+
+        pageNation.total = res.data.total
+
+        hasMore.value =
+            articleList.value.length < pageNation.total &&
+            records.length > 0
+
+        console.log('hasMore:', hasMore.value)
+
+        if (hasMore.value) {
+            pageNation.currentPage += 1
+            console.log('加1之后 currentPage:', pageNation.currentPage)
+        }
+
     } finally {
         isLoading.value = false
-        // If the first page does not fill the viewport, continue until it does.
-        if (isLoadMoreTriggerVisible && hasMore.value) getArticleList()
     }
 }
 
