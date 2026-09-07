@@ -38,6 +38,9 @@
                         </div>
                     </el-card>
                 </el-row>
+                <div ref="loadMoreTrigger" class="load-more-trigger" aria-hidden="true"></div>
+                <p v-if="isLoading" class="load-more-status">加载中...</p>
+                <p v-else-if="!hasMore && articleList.length" class="load-more-status">没有更多文章了</p>
             </div>         
         </div>
             </el-scrollbar>
@@ -48,7 +51,7 @@
 </template>
 
 <script setup>
-import { onMounted,ref ,reactive } from 'vue'
+import { onBeforeUnmount, onMounted, ref, reactive } from 'vue'
 import {UserGetArticleList} from '../api/admin.js'
 import { useRouter } from 'vue-router'
 
@@ -67,7 +70,16 @@ const commandPageNation=reactive({
 const commandArticleList=ref([])
 
 const articleList=ref([])
+const loadMoreTrigger = ref(null)
+const isLoading = ref(false)
+const hasMore = ref(true)
+let isLoadMoreTriggerVisible = false
+let articleObserver
+
 const getArticleList=async()=>{
+    if (isLoading.value || !hasMore.value) return
+
+    isLoading.value = true
     const params={
         currentPage:pageNation.currentPage,
         size:pageNation.size,
@@ -78,12 +90,18 @@ const getArticleList=async()=>{
     try{
         const res=await UserGetArticleList(params)
         console.log( "文章列表",res);
-        articleList.value=res.data.records
+        const records = res.data.records || []
+        articleList.value.push(...records)
         pageNation.total=res.data.total
+        hasMore.value = articleList.value.length < pageNation.total && records.length > 0
+        if (records.length > 0) pageNation.currentPage += 1
 
     }catch(error){
         console.log(error);
-        
+    } finally {
+        isLoading.value = false
+        // If the first page does not fill the viewport, continue until it does.
+        if (isLoadMoreTriggerVisible && hasMore.value) getArticleList()
     }
 }
 
@@ -112,9 +130,17 @@ const getImg=(url)=>{
 
 }
 onMounted(async()=>{
+    articleObserver = new IntersectionObserver((entries) => {
+        isLoadMoreTriggerVisible = entries[0].isIntersecting
+        if (isLoadMoreTriggerVisible) getArticleList()
+    }, { rootMargin: '120px 0px' })
+
+    articleObserver.observe(loadMoreTrigger.value)
     getArticleList()
     getCommandArticleList()
 })
+
+onBeforeUnmount(() => articleObserver?.disconnect())
 
 </script>
 
@@ -219,5 +245,15 @@ onMounted(async()=>{
             }
         }
     }
+}
+
+.load-more-trigger {
+    height: 1px;
+}
+
+.load-more-status {
+    margin: 12px 0;
+    color: var(--text-secondary-color);
+    text-align: center;
 }
 </style>
