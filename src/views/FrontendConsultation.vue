@@ -690,7 +690,7 @@ onMounted(async () => {
   padding: 4px 0;
 }
 
-/* Chat Header 样式区域 */
+/* Chat Header 样式区域 */ 
 .chat-header {
     display: flex;
     flex-direction: row;

@@ -12,7 +12,7 @@ const routes = [
         children: [//子路由：
             {
                 path: "dashboard",
-                component: () => import("@/views/Dashboard.vue"),
+                component: () => import("@/views/Dashboard.vue"),//路由懒加载
                 meta: { title: "数据分析",
                     icon: "PieChart"
                  }

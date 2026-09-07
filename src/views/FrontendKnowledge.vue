@@ -14,7 +14,7 @@
 
                 <el-row v-for="item in articleList" :key="item.id"> 
                     <el-card class="article_card"
-                    @click="router.push(`/knowledge/article/${item.id}`)"
+                    @click="openArticle (item.id)"
                     >
                         <div class="card_content">
                             <div class="cover_box">
@@ -75,7 +75,10 @@ const isLoading = ref(false)
 const hasMore = ref(true)
 let isLoadMoreTriggerVisible = false
 let articleObserver
-
+const openArticle = (id) => {
+    const route = router.resolve(`/knowledge/article/${id}`)
+    window.open(route.href, '_blank')
+}
 const getArticleList = async () => {
     if (isLoading.value || !hasMore.value) return
 
