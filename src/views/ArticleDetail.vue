@@ -4,9 +4,8 @@
     <div v-if="!detail.title" class="loading-state">
       加载中...
     </div>
-
-    <!-- 主体内容区 -->
-    <article v-else class="article-card">
+    <el-scrollbar v-else max-height="100%">
+    <article class="article-card">
       <!-- 文章封面图 -->
       <div v-if="detail.coverImage" class="article-cover">
         <img :src="detail.coverImage" :alt="detail.title" />
@@ -53,6 +52,7 @@
         </div>
       </footer>
     </article>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -86,10 +86,8 @@ onMounted(() => {
 <style lang="scss" scoped>
 // 容器样式：居中且限定最大宽度，保持视觉聚焦
 .article-detail-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  max-width: 100%;
+  height: 100%;
   color: var(--text-color);
 }
 
@@ -107,7 +105,8 @@ onMounted(() => {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  padding: 32px;
+  padding: 50px 200px;
+
 }
 
 // 封面图美化
