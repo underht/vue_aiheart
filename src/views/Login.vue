@@ -43,10 +43,11 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { login } from '@/api/admin';
+import { useUserStore } from '@/stores/user.js';
 const router = useRouter();
 const formRef = ref(null);
 const loading = ref(false);
-
+const userstore = useUserStore();
 const formData = reactive({
     username: "",
     password: ""
@@ -65,13 +66,17 @@ const handleLogin = async () => {
     try {
         const response = await login(formData);
         console.log(formData);
-        
+        const userInfo = {
+            username: formData.username,
+            role: response.data.roleType,
+            token: response.data.token
+        };
+        userstore.setUser(userInfo);
         localStorage.setItem("token", response.data.token);
         // console.log('response is:', response);
 
         localStorage.setItem('userinfo', response.data.userInfo);
         localStorage.setItem('roleType', response.data.roleType);
-
         ElMessage.success("登录成功");
         // console.log('user is:', formData.username);
 

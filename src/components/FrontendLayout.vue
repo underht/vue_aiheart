@@ -6,7 +6,7 @@
         <div class="brand-icon-wrapper">
           <el-icon class="brand-icon"><Service /></el-icon>
         </div>
-        <span class="brand-name">心理健康AI助手</span>
+        <span class="brand-name" @click="router.push('/home')">心理健康AI助手</span>
       </div>
 
       <div class="nav-section">
@@ -70,6 +70,8 @@ import { Service } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue';
 import { logoutApi } from '@/api/admin.js';
 import {useDisplayStore} from '@/stores/display.js'
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const displayStore = useDisplayStore()
 const handlelogout = async() => {
   localStorage.removeItem('token');
